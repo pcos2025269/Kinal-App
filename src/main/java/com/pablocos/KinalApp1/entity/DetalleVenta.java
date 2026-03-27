@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @Table(name= "DetalleVenta")
 public class DetalleVenta {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long codigoDetalleVenta;
     @Column(nullable = false)
@@ -16,10 +17,10 @@ public class DetalleVenta {
     @Column(nullable = false)
     private BigDecimal subTotal;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="codigo_producto",foreignKey = @ForeignKey(name = "FK_codigo_producto"))
+    @JoinColumn(name ="codigo_producto",nullable = false,foreignKey = @ForeignKey(name = "FK_codigo_producto"))
     private Producto detalleproducto;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "codigo_venta",foreignKey = @ForeignKey(name = "FK_codigo_venta"))
+    @JoinColumn(name = "codigo_venta",nullable = false,foreignKey = @ForeignKey(name = "FK_codigo_venta"))
     private Venta detalleVenta;
 
     public DetalleVenta() {

@@ -19,7 +19,7 @@ public class Cliente {
     @Column(nullable = false)
     private Long estado;
 
-    @OneToMany(mappedBy = "Venta", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clienteVenta", cascade = CascadeType.ALL)
     private List<Venta> ventas;
 
     public Cliente() {

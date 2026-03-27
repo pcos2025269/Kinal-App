@@ -16,4 +16,6 @@ public interface IUsuarioService {
     Usuario actualizar(Long codigoUsuario, Usuario usuario);
 
     void eliminar(Long codigoUsuario);
+
+    Optional<Usuario> findByCodigoUsuario(Long codigoUsuario);
 }

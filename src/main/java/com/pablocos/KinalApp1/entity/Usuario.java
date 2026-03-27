@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-
 @Table(name = "Usuarios" )
 public class Usuario {
     @Id
-    @Column(name = "codigo_Usuario", nullable = false)
-    private Long codigoUsuario;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "codigo_usuario", nullable = false)
+    private Long id;
     @Column(nullable = false)
     private String nameUser;
     @Column(nullable = false)
@@ -22,27 +22,28 @@ public class Usuario {
     @Column(nullable = false)
     private Long estado;
 
-    @OneToMany(mappedBy = "Venta",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuarioVenta",cascade = CascadeType.ALL)
     private List<Venta> venta;
 
     public Usuario() {
     }
 
-    public Usuario(Long codigoUsuario, String nameUser, String passwordUser, String email, String rol, Long estado) {
-        this.codigoUsuario = codigoUsuario;
+    public Usuario(Long id, String nameUser, String passwordUser, String email, String rol, Long estado, List<Venta> venta) {
+        this.id = id;
         this.nameUser = nameUser;
         this.passwordUser = passwordUser;
         this.email = email;
         this.rol = rol;
         this.estado = estado;
+        this.venta = venta;
     }
 
-    public Long getCodigoUsuario() {
-        return codigoUsuario;
+    public Long getId() {
+        return id;
     }
 
-    public void setCodigoUsuario(Long codigoUsuario) {
-        this.codigoUsuario = codigoUsuario;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNameUser() {
@@ -83,5 +84,13 @@ public class Usuario {
 
     public void setEstado(Long estado) {
         this.estado = estado;
+    }
+
+    public List<Venta> getVenta() {
+        return venta;
+    }
+
+    public void setVenta(List<Venta> venta) {
+        this.venta = venta;
     }
 }
