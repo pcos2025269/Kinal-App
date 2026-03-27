@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
+@Entity
+@Table(name = "Ventas")
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +19,14 @@ public class Venta {
     @Column(nullable = false)
     private Long estado;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="dpi_Cliente",foreignKey = @ForeignKey(name = "FK_dpi_cliente"))
+    @JoinColumn(name ="dpi_cliente",nullable = false,foreignKey = @ForeignKey(name = "FK_dpi_cliente"))
     private Cliente clienteVenta;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="codigo_usuario",foreignKey = @ForeignKey(name = "FK_codigo_usuario"))
+    @JoinColumn(name ="codigo_usuario",nullable = false,foreignKey = @ForeignKey(name = "FK_codigo_usuario"))
     private Usuario usuarioVenta;
 
-    @OneToMany(mappedBy = "DetalleVenta", cascade = CascadeType.ALL)
-    private List<DetalleVenta> DetalleVenta;
+    @OneToMany(mappedBy = "detalleVenta", cascade = CascadeType.ALL)
+    private List<DetalleVenta> detalleVenta;
 
     public Venta() {
     }

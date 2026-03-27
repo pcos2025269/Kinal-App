@@ -54,7 +54,7 @@ public class ClienteService implements IClienteService {
              */
             validarCliente(cliente);
             if (cliente.getEstado() == 0 )
-                cliente.setEstado(1);
+                cliente.setEstado(1L);
             return clienteRepository.save(cliente);
         }
 

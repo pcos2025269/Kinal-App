@@ -41,7 +41,7 @@ public class UserService implements IUsuarioService{
         if (!usuarioRepository.existsById(codigoUsuario)){
             throw new IllegalArgumentException("No se encontro Usuario con el codigo:" + codigoUsuario);
         }
-        usuario.setCodigoUsuario(codigoUsuario);
+        usuario.setId(codigoUsuario);
         validarUsuario(usuario);
         return usuarioRepository.save(usuario);
     }
@@ -54,8 +54,13 @@ public class UserService implements IUsuarioService{
         usuarioRepository.deleteAllById(codigoUsuario);
     }
 
+    @Override
+    public Optional<Usuario> findByCodigoUsuario(Long codigoUsuario) {
+        return Optional.empty();
+    }
+
     private void validarUsuario(Usuario usuario){
-         if (usuario.getCodigoUsuario() == null){
+         if (usuario.getId() == null){
              throw new IllegalArgumentException("Se necesita que ingrese el codigo del usuario");
          }
 
