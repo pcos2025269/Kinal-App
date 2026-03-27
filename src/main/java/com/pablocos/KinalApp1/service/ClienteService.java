@@ -103,7 +103,7 @@ public class ClienteService implements IClienteService {
 
         @Override
         @Transactional(readOnly = true)
-        public List<Cliente> buscarPorEstadoConFor(int estado) {
+        public List<Cliente> buscarPorEstadoConFor(Long estado) {
             List<Cliente> Clientes = clienteRepository.findAll();
             List<Cliente> filtrados = new ArrayList<>();
             for (Cliente c :  Clientes) {

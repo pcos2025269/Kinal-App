@@ -2,14 +2,15 @@ package com.pablocos.KinalApp1.service;
 
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 @Service
 @Transactional
 public class UserService implements IUsuarioService{
+
 
     private final UsuarioRepository usuarioRepository;
 
@@ -18,7 +19,7 @@ public class UserService implements IUsuarioService{
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
@@ -57,6 +58,17 @@ public class UserService implements IUsuarioService{
     @Override
     public Optional<Usuario> findByCodigoUsuario(Long codigoUsuario) {
         return Optional.empty();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existePorID(Long id) {
+        return usuarioRepository.existsById(id);
+    }
+
+    @Override
+    public List<Usuario> buscarPorEstadoConFor(Long estado) {
+        return List.of();
     }
 
     private void validarUsuario(Usuario usuario){

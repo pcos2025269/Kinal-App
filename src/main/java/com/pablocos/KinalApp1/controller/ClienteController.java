@@ -101,7 +101,7 @@ public class ClienteController {
     }
 
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Cliente>> buscarPorEstado(@PathVariable int estado) {
+    public ResponseEntity<List<Cliente>> buscarPorEstado(@PathVariable Long estado) {
         List<Cliente> clientes = clienteService.buscarPorEstadoConFor(estado);
         if (clientes.isEmpty()) {
             return ResponseEntity.notFound().build();
