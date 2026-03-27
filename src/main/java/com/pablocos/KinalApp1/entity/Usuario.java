@@ -1,9 +1,8 @@
 package com.pablocos.KinalApp1.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 
@@ -22,6 +21,9 @@ public class Usuario {
     private String rol;
     @Column(nullable = false)
     private Long estado;
+
+    @OneToMany(mappedBy = "Venta",cascade = CascadeType.ALL)
+    private List<Venta> venta;
 
     public Usuario() {
     }
