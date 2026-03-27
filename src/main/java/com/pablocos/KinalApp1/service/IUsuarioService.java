@@ -18,4 +18,8 @@ public interface IUsuarioService {
     void eliminar(Long codigoUsuario);
 
     Optional<Usuario> findByCodigoUsuario(Long codigoUsuario);
+    boolean existePorID(Long id);
+
+    List<Usuario> buscarPorEstadoConFor (Long estado);
+
 }

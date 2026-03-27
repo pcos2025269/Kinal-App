@@ -44,6 +44,6 @@ public interface IClienteService {
     //boolean - Retornara true si existe y false si no exite
     boolean existePorDPI(String dpi);
 
-    List<Cliente> buscarPorEstadoConFor(int estado);
+    List<Cliente> buscarPorEstadoConFor(Long estado);
 
 }
