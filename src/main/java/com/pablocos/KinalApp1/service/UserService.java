@@ -72,9 +72,7 @@ public class UserService implements IUsuarioService{
     }
 
     private void validarUsuario(Usuario usuario){
-         if (usuario.getId() == null){
-             throw new IllegalArgumentException("Se necesita que ingrese el codigo del usuario");
-         }
+
 
          if (usuario.getNameUser() == null || usuario.getNameUser().trim().isEmpty()){
              throw new IllegalArgumentException("Se necesita un usernamer para continuar");

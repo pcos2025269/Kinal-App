@@ -19,7 +19,7 @@ public class Producto {
     @Column(nullable = false)
     private Long stock;
     @Column(nullable = false)
-    private String estado;
+    private Long estado;
 
     @OneToMany(mappedBy = "detalleproducto",cascade = CascadeType.ALL)
     private List<DetalleVenta> detalleproducto;
@@ -27,7 +27,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(Long codigoProducto, String nombreProducto, BigDecimal precio, Long stock, String estado) {
+    public Producto(Long codigoProducto, String nombreProducto, BigDecimal precio, Long stock, Long estado) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.precio = precio;
@@ -67,11 +67,11 @@ public class Producto {
         this.stock = stock;
     }
 
-    public String getEstado() {
+    public Long getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Long estado) {
         this.estado = estado;
     }
 }
