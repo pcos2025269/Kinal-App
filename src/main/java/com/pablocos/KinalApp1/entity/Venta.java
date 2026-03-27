@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Venta {
     @Id
@@ -22,6 +23,9 @@ public class Venta {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="codigo_usuario",foreignKey = @ForeignKey(name = "FK_codigo_usuario"))
     private Usuario usuarioVenta;
+
+    @OneToMany(mappedBy = "DetalleVenta", cascade = CascadeType.ALL)
+    private List<DetalleVenta> DetalleVenta;
 
     public Venta() {
     }
