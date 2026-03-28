@@ -1,10 +1,12 @@
 package com.pablocos.KinalApp1.service;
 
+import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -68,7 +70,14 @@ public class UserService implements IUsuarioService{
 
     @Override
     public List<Usuario> buscarPorEstadoConFor(Long estado) {
-        return List.of();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> filtrados = new ArrayList<>();
+        for (Usuario c :  usuarios) {
+            if (c.getEstado() == estado) {
+                filtrados.add(c);
+            }
+        }
+        return filtrados;
     }
 
     private void validarUsuario(Usuario usuario){
