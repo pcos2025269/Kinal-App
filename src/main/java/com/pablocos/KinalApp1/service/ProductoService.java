@@ -75,6 +75,7 @@ public class ProductoService implements IProductosService {
         return filtrados;
     }
 
+
     private void validarProducto(Producto producto){
         if (producto.getNombreProducto() == null || producto.getNombreProducto().trim().isEmpty()){
             throw new IllegalArgumentException("El Nombre del producto es obligatorio");

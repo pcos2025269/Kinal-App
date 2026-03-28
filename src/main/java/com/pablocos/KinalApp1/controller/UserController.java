@@ -1,5 +1,6 @@
 package com.pablocos.KinalApp1.controller;
 
+import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.service.IUsuarioService;
 import org.springframework.http.HttpStatus;
@@ -68,4 +69,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Usuario>> buscarPorEstado(@PathVariable Long estado) {
+        List<Usuario> usuario = usuarioService.buscarPorEstadoConFor(estado);
+        if (usuario.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(usuario);
+    }
 }

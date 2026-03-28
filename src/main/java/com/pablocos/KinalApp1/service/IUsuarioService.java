@@ -1,5 +1,6 @@
 package com.pablocos.KinalApp1.service;
 
+import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 
 import java.util.List;
@@ -20,6 +21,6 @@ public interface IUsuarioService {
     Optional<Usuario> findByCodigoUsuario(Long codigoUsuario);
     boolean existePorID(Long id);
 
-    List<Usuario> buscarPorEstadoConFor (Long estado);
+    List<Usuario> buscarPorEstadoConFor(Long estado);
 
 }
