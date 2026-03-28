@@ -1,15 +1,13 @@
 package com.pablocos.KinalApp1.service;
 
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.DetalleVenta;
 import com.pablocos.KinalApp1.repository.DetalleVentaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaService implements IDetalleVenta {
+public class DetalleVentaService implements IDetalleVentaSerrvice {
 
     private final DetalleVentaRepository detalleVentaRepository;
 
