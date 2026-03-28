@@ -12,9 +12,9 @@ public class DetalleVenta {
     private Long codigoDetalleVenta;
     @Column(nullable = false)
     private Long cantidad;
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2,nullable = false)
     private BigDecimal precioUnitario;
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2,nullable = false)
     private BigDecimal subTotal;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="codigo_producto",nullable = false,foreignKey = @ForeignKey(name = "FK_codigo_producto"))

@@ -14,7 +14,7 @@ public class Venta {
     private Long codigoVenta;
     @Column(nullable = false)
     private LocalDate fechaVenta;
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2,nullable = false)
     private BigDecimal total;
     @Column(nullable = false)
     private Long estado;

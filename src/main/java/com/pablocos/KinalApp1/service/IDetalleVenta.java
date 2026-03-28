@@ -16,7 +16,7 @@ public interface IDetalleVenta {
     DetalleVenta actualizar(Long codigoDetalleVenta, DetalleVenta detalleVenta);
 
     void eliminar(Long codigoUsuario);
-    
+
     boolean existePorCodigo(Long codigoDetalleVenta);
 
     List<DetalleVenta> buscarPorEstadoConFor (Long estado);
