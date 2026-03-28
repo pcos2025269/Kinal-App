@@ -20,7 +20,7 @@ import java.util.Optional;
      */
     @Transactional
 public class ClienteService implements IClienteService {
-     /*
+        /*
         private: solo es accesible dentro de la misma clase
         final: No puede cambiar porque es constante
         ClienteRepository: El repositorio para acceder a la base de datos
@@ -48,9 +48,9 @@ public class ClienteService implements IClienteService {
         @Override
         public Cliente guardar(Cliente cliente) {
             /*
-             Metodo de guardar: crea un cliente
-             Aca es donde colocamos la logica del negocio Antes de guardar pero
-             Primero validamos el dato
+            Metodo de guardar: crea un cliente
+            Aca es donde colocamos la logica del negocio Antes de guardar pero
+            Primero validamos el dato
              */
             validarCliente(cliente);
             if (cliente.getEstado() == 0 )

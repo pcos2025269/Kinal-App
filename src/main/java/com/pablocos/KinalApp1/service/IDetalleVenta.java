@@ -19,5 +19,5 @@ public interface IDetalleVenta {
 
     boolean existePorCodigo(Long codigoDetalleVenta);
 
-    List<DetalleVenta> buscarPorEstadoConFor (Long estado);
+
 }
