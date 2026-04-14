@@ -5,11 +5,12 @@ import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.service.IUsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/users")
 public class UserController {
     private final IUsuarioService usuarioService;
