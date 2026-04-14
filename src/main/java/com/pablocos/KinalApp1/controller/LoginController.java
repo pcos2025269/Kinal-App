@@ -27,8 +27,8 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String nameUser,
-                        @RequestParam String password) {
-        boolean isAuth = usuarioService.validarAcceso(nameUser, password);
+                        @RequestParam String passwordUser) {
+        boolean isAuth = usuarioService.validarAcceso(nameUser, passwordUser);
         if (isAuth) {
             return "redirect:/Inicio";
         } else {
