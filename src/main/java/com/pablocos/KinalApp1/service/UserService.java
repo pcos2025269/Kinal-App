@@ -3,6 +3,7 @@ package com.pablocos.KinalApp1.service;
 import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,17 +14,24 @@ import java.util.Optional;
 @Transactional
 public class UserService implements IUsuarioService{
 
+    @Autowired
+    private final UsuarioRepository repository;
 
-    private final UsuarioRepository usuarioRepository;
+    public UserService(UsuarioRepository repository) {
+        this.repository = repository;
+    }
 
-    public UserService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    @Override
+    public boolean validarAcceso(String nameUser, String passwordUser) {
+        return repository.findByNameUser(nameUser)
+                .map(u -> u.getNameUser().equals(passwordUser))
+                .orElse(false);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
-        return usuarioRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
@@ -31,7 +39,7 @@ public class UserService implements IUsuarioService{
         validarUsuario(usuario);
         if (usuario.getEstado() == 0)
             usuario.setEstado(1L);
-        return usuarioRepository.save(usuario);
+        return repository.save(usuario);
     }
 
     @Override
@@ -41,20 +49,20 @@ public class UserService implements IUsuarioService{
 
     @Override
     public Usuario actualizar(Long codigoUsuario, Usuario usuario) {
-        if (!usuarioRepository.existsById(codigoUsuario)){
+        if (!repository.existsById(codigoUsuario)){
             throw new IllegalArgumentException("No se encontro Usuario con el codigo:" + codigoUsuario);
         }
         usuario.setId(codigoUsuario);
         validarUsuario(usuario);
-        return usuarioRepository.save(usuario);
+        return repository.save(usuario);
     }
 
     @Override
     public void eliminar(Long codigoUsuario) {
-        if (!usuarioRepository.existsById(codigoUsuario)){
+        if (!repository.existsById(codigoUsuario)){
             throw new IllegalArgumentException("No se encontro Usuario con el codigo:" + codigoUsuario);
         }
-        usuarioRepository.deleteAllById(codigoUsuario);
+        repository.deleteAllById(codigoUsuario);
     }
 
     @Override
@@ -65,12 +73,12 @@ public class UserService implements IUsuarioService{
     @Override
     @Transactional(readOnly = true)
     public boolean existePorID(Long id) {
-        return usuarioRepository.existsById(id);
+        return repository.existsById(id);
     }
 
     @Override
     public List<Usuario> buscarPorEstadoConFor(Long estado) {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = repository.findAll();
         List<Usuario> filtrados = new ArrayList<>();
         for (Usuario c :  usuarios) {
             if (c.getEstado() == estado) {
