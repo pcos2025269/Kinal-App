@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUsuarioService {
+    boolean validarAcceso(String username, String password);
 
     List<Usuario> listarTodos();
 

@@ -3,19 +3,42 @@ package com.pablocos.KinalApp1.controller;
 import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.service.IUsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/users")
+@Controller
 public class UserController {
+    @Autowired
     private final IUsuarioService usuarioService;
 
     public UserController(IUsuarioService usuarioService) {
         this.usuarioService = usuarioService;
+    }
+
+
+@GetMapping("/login")
+public String index(){return "login";}
+
+    @PostMapping("/login")
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
+                        Model model) {
+
+        boolean isAuth = usuarioService.validarAcceso(username, password);
+
+        if (isAuth) {
+
+            return "redirect:/Inicio";
+        } else {
+
+            return "redirect:/login?error=true";
+        }
     }
 
     @GetMapping
