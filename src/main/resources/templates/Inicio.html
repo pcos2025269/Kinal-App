@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <h1></h1>
+    <p class="subtitle">Kinal App Elije </p>
+
+    <div class="menu-buttons">
+        <a th:href="@{/restaurantes}" class="btn btn-restaurantes">
+            <div class="btn-icon">🍕</div>
+            <span class="btn-title">Restaurantes</span>
+            <small>Descubre los mejores lugares</small>
+        </a>
+
+        <a th:href="@{/resenas}" class="btn btn-resenas">
+            <div class="btn-icon">⭐</div>
+            <span class="btn-title">Reseñas</span>
+            <small>Lee lo que opinan otros comensales</small>
+        </a>
+    </div>
+</div>
+</body>
+</html>

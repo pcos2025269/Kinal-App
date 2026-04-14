@@ -20,7 +20,7 @@ public class RegisterController {
     }
 
     @PostMapping("/registro")
-    public String registrarUsuario(@RequestParam String nameUser, @RequestParam String password, @RequestParam String email) {
+    public String registrarUsuario(@RequestParam String nameUser, @RequestParam String passwordUser, @RequestParam String email) {
 
         if (repository.findByNameUser(nameUser).isPresent()) {
             return "redirect:/registro?error=existe";
@@ -28,7 +28,7 @@ public class RegisterController {
 
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNameUser(nameUser);
-        nuevoUsuario.setPasswordUser(password);
+        nuevoUsuario.setPasswordUser(passwordUser);
         nuevoUsuario.setEmail(email);
         nuevoUsuario.setEstado(1L);
         nuevoUsuario.setRol("usuario");
