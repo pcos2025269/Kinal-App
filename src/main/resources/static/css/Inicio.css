@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2c3e50;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.subtitle {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #ecf0f1;
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    display: inline-block;
+    padding: 18px 45px;
+    border-radius: 50px;
+    margin-bottom: 55px;
+    letter-spacing: 2px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-bottom: 3px solid #3498db;
+    font-style: italic;
+}
+
+.menu-buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-clientes, .btn-productos, .btn-resenas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 35px 50px;
+    border-radius: 16px;
+    transition: 0.25s ease;
+    cursor: pointer;
+    min-width: 210px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border: 1px solid #bdc3c7;
+}
+
+.btn-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.btn-icon {
+    font-size: 2.5rem;
+}
+
+.btn-clientes:hover, .btn-productos:hover, .btn-resenas:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background-color: #ffffff;
+}
+
+.btn-clientes:active, .btn-productos:active, .btn-resenas:active {
+    transform: translateY(2px);
+}
+
+.btn-clientes .btn-title {
+    color: #2980b9;
+}
+
+.btn-productos .btn-title {
+    color: #27ae60;
+}
+
+.btn-resenas .btn-title {
+    color: #e67e22;
+}
