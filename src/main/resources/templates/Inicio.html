@@ -2,20 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Menu</title>
+    <link rel="stylesheet" th:href="@{/css/inicio.css}">
 </head>
 <body>
 <div class="container">
     <h1></h1>
-    <p class="subtitle">Kinal App Elije </p>
+    <p class="subtitle">Kinal App Elije un Crud a Usar </p>
 
     <div class="menu-buttons">
-        <a th:href="@{/clientes}" class="btn btn-restaurantes">
+        <a th:href="@{/clientes/lista}" class="btn-clientes">
             <div class="btn-icon"></div>
             <span class="btn-title">Clientes</span>
         </a>
 
-        <a th:href="@{/producto}" class="btn btn-resenas">
+        <a th:href="@{/producto}" class="btn-productos">
             <div class="btn-icon"></div>
             <span class="btn-title">Producto</span>
         </a>
@@ -23,7 +24,7 @@
             <div class="btn-icon"></div>
             <span class="btn-title">Venta</span>
         </a>
-    </div>venta
+    </div>
 </div>
 </body>
 </html>

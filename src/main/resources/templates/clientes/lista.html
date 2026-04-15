@@ -56,24 +56,24 @@
                     </thead>
                     <tbody>
                     <tr th:each="cliente : ${clientes}">
-                        <td th:text="${cliente.dpi}"></td>
-                        <td th:text="${cliente.nombre}"></td>
-                        <td th:text="${cliente.apellido}"></td>
-                        <td th:text="${cliente.direccion}"></td>
+                        <td th:text="${cliente.DPICliente}"></td>
+                        <td th:text="${cliente.nombreCliente}"></td>
+                        <td th:text="${cliente.apellidoCliente}"></td>
+                        <td th:text="${cliente.direccionCliente}"></td>
                         <td>
                             <span th:if="${cliente.estado == 1}" class="badge bg-success">Activo</span>
                             <span th:if="${cliente.estado == 0}" class="badge bg-danger">Inactivo</span>
                         </td>
                         <td>
-                            <a th:href="@{/clientes/ver/{dpi}(dpi=${cliente.dpi})}"
+                            <a th:href="@{/clientes/ver/{dpi}(dpi=${cliente.DPICliente})}"
                                class="btn btn-sm btn-info me-1" title="Ver">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.dpi})}"
+                            <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}"
                                class="btn btn-sm btn-warning me-1" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a th:href="@{/clientes/eliminar/{dpi}(dpi=${cliente.dpi})}"
+                            <a th:href="@{/clientes/eliminar/{dpi}(dpi=${cliente.DPICliente})}"
                                class="btn btn-sm btn-danger"
                                onclick="return confirm('¿Estás seguro de eliminar este cliente?')"
                                title="Eliminar">
@@ -95,7 +95,7 @@
             </div>
 
             <div class="mt-3">
-                <a th:href="@{/}" class="btn btn-secondary">
+                <a th:href="@{/Inicio}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Volver al menú
                 </a>
             </div>
