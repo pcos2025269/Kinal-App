@@ -26,8 +26,8 @@ public class LoginController {
     public String index(){return "login";}
 
     @PostMapping("/login")
-    public String login(@RequestParam String nameUser,
-                        @RequestParam String passwordUser) {
+    public String login(@RequestParam("nameUser") String nameUser,
+                        @RequestParam("passwordUser") String passwordUser)  {
         boolean isAuth = usuarioService.validarAcceso(nameUser, passwordUser);
         if (isAuth) {
             return "redirect:/Inicio";
@@ -38,6 +38,6 @@ public class LoginController {
 
     @GetMapping("/Inicio")
     public String Inicio() {
-        return "Inicio"; // Asegúrate de tener un dashboard.html o cambia la ruta
+        return "Inicio";
     }
 }

@@ -21,7 +21,7 @@ public class ClienteController {
     }
 
     @GetMapping("/lista")
-    public String listarVista(@RequestParam(required = false) String buscar, Model model) {
+    public String listarVista(@RequestParam(name = "buscar", required = false) String buscar, Model model) {
         List<Cliente> clientes;
 
         if (buscar != null && !buscar.trim().isEmpty()) {

@@ -52,7 +52,7 @@ public class VentaController {
                                Model model) {
         try {
             Cliente cliente = clienteService.buscarPorDPI(dpiCliente).orElse(null);
-            Usuario usuario = usuarioService.findById(id).orElse(null);
+            Usuario usuario = usuarioService.findByCodigoUsuario(id).orElse(null);
 
             Venta venta = new Venta();
             venta.setClienteVenta(cliente);
@@ -95,7 +95,7 @@ public class VentaController {
                                   Model model) {
         try {
             Cliente cliente = clienteService.buscarPorDPI(dpiCliente).orElse(null);
-            Usuario usuario = usuarioService.findById(id).orElse(null);
+            Usuario usuario = usuarioService.findByCodigoUsuario(id).orElse(null);
 
             Venta venta = ventaService.buscarPorCodigoVenta(codigoVenta).orElse(null);
             venta.setClienteVenta(cliente);
