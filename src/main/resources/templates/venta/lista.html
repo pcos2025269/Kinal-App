@@ -14,14 +14,14 @@
       <h2 class="mb-0">
         <i class="fas fa-shopping-cart"></i> Ventas
       </h2>
-      <a th:href="@{/ventas/nuevo}" class="btn btn-light">
+      <a th:href="@{/venta/nuevo}" class="btn btn-light">
         <i class="fas fa-plus"></i> Nueva Venta
       </a>
     </div>
     <div class="card-body">
       <div class="row mb-4">
         <div class="col-md-8 mx-auto">
-          <form th:action="@{/ventas/lista}" method="get" class="d-flex">
+          <form th:action="@{/venta/lista}" method="get" class="d-flex">
             <input type="text"
                    name="buscar"
                    class="form-control me-2"
@@ -30,7 +30,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-search"></i> Buscar
             </button>
-            <a th:href="@{/ventas/lista}" class="btn btn-secondary ms-2">
+            <a th:href="@{/venta/lista}" class="btn btn-secondary ms-2">
               <i class="fas fa-sync-alt"></i> Limpiar
             </a>
           </form>
@@ -60,22 +60,22 @@
             <td th:text="${venta.codigoVenta}"></td>
             <td th:text="${venta.fechaVenta}"></td>
             <td th:text="${venta.clienteVenta.nombreCliente} + ' ' + ${venta.clienteVenta.apellidoCliente}"></td>
-            <td th:text="${venta.usuarioVenta.nombreUsuario}"></td>
+            <td th:text="${venta.usuarioVenta.nameUser}"></td>
             <td>Q <span th:text="${venta.total}"></span></td>
             <td>
               <span th:if="${venta.estado == 1}" class="badge bg-success">Activo</span>
               <span th:if="${venta.estado == 0}" class="badge bg-danger">Inactivo</span>
             </td>
             <td>
-              <a th:href="@{/ventas/ver/{id}(id=${venta.codigoVenta})}"
+              <a th:href="@{/venta/ver/{id}(id=${venta.codigoVenta})}"
                  class="btn btn-sm btn-info me-1" title="Ver">
                 <i class="fas fa-eye"></i>
               </a>
-              <a th:href="@{/ventas/editar/{id}(id=${venta.codigoVenta})}"
+              <a th:href="@{/venta/editar/{id}(id=${venta.codigoVenta})}"
                  class="btn btn-sm btn-warning me-1" title="Editar">
                 <i class="fas fa-edit"></i>
               </a>
-              <a th:href="@{/ventas/eliminar/{id}(id=${venta.codigoVenta})}"
+              <a th:href="@{/venta/eliminar/{id}(id=${venta.codigoVenta})}"
                  class="btn btn-sm btn-danger"
                  onclick="return confirm('¿Estás seguro de eliminar esta venta?')"
                  title="Eliminar">

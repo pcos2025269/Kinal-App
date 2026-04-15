@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/ventas")
+@RequestMapping("/venta")
 public class VentaController {
 
     private final IVentaService ventaService;
@@ -28,8 +28,6 @@ public class VentaController {
         this.clienteService = clienteService;
         this.usuarioService = usuarioService;
     }
-
-    // VISTAS
     @GetMapping("/lista")
     public String listarVista(@RequestParam(required = false) String buscar, Model model) {
         List<Venta> ventas;
@@ -73,7 +71,7 @@ public class VentaController {
         }
 
         model.addAttribute("ventas", ventas);
-        return "ventas/lista";
+        return "venta/lista";
     }
 
     @GetMapping("/nuevo")
@@ -81,7 +79,7 @@ public class VentaController {
         model.addAttribute("venta", new Venta());
         model.addAttribute("clientes", clienteService.listarTodos());
         model.addAttribute("usuarios", usuarioService.listarTodos());
-        return "ventas/formulario";
+        return "venta/formulario";
     }
 
     @PostMapping("/guardar")
@@ -98,13 +96,13 @@ public class VentaController {
             venta.setFechaVenta(LocalDate.now());
 
             ventaService.guardar(venta);
-            return "redirect:/ventas/lista";
+            return "redirect:/venta/lista";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("venta", venta);
             model.addAttribute("clientes", clienteService.listarTodos());
             model.addAttribute("usuarios", usuarioService.listarTodos());
-            return "ventas/formulario";
+            return "venta/formulario";
         }
     }
 
@@ -115,7 +113,7 @@ public class VentaController {
                         venta -> model.addAttribute("venta", venta),
                         () -> model.addAttribute("error", "Venta no encontrada")
                 );
-        return "ventas/detalle";
+        return "venta/detalle";
     }
 
     @GetMapping("/editar/{codigoVenta}")
@@ -129,7 +127,7 @@ public class VentaController {
                         },
                         () -> model.addAttribute("error", "Venta no encontrada")
                 );
-        return "ventas/formulario";
+        return "venta/formulario";
     }
 
     @PostMapping("/actualizar/{codigoVenta}")
@@ -147,10 +145,10 @@ public class VentaController {
             venta.setUsuarioVenta(usuario);
 
             ventaService.actualizar(codigoVenta, venta);
-            return "redirect:/ventas/lista";
+            return "redirect:/venta/lista";
         } catch (RuntimeException e) {
             model.addAttribute("error", "Venta no encontrada");
-            return "ventas/formulario";
+            return "venta/formulario";
         }
     }
 
@@ -159,7 +157,7 @@ public class VentaController {
         if (ventaService.existePorCodigoVenta(codigoVenta)) {
             ventaService.eliminar(codigoVenta);
         }
-        return "redirect:/ventas/lista";
+        return "redirect:/venta/lista";
     }
 
     // API REST
