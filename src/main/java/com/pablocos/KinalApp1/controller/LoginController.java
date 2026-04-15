@@ -36,5 +36,8 @@ public class LoginController {
         }
     }
 
-
+    @GetMapping("/Inicio")
+    public String Inicio() {
+        return "Inicio"; // Asegúrate de tener un dashboard.html o cambia la ruta
+    }
 }
