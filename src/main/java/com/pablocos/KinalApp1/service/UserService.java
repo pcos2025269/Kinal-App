@@ -1,102 +1,74 @@
 package com.pablocos.KinalApp1.service;
 
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Transactional
-public class UserService implements IUsuarioService{
+public class UserService implements IUsuarioService {
 
-    @Autowired
-    private final UsuarioRepository repository;
+    private final UsuarioRepository usuarioRepository;
 
-    public UserService(UsuarioRepository repository) {
-        this.repository = repository;
+    public UserService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
-    public boolean validarAcceso(String nameUser, String passwordUser) {
-        return repository.findByNameUser(nameUser)
-                .map(u -> u.getPasswordUser().equals(passwordUser))
-                .orElse(false);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
-        return repository.findAll();
+        return usuarioRepository.findAll();
     }
 
     @Override
-    public Usuario guardar(Usuario usuario) {
-        validarUsuario(usuario);
-        if (usuario.getEstado() == 0)
-            usuario.setEstado(1L);
-        return repository.save(usuario);
-    }
-
-    @Override
-    public Optional<Usuario> buscarPorEstado(Long estado) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Usuario actualizar(Long codigoUsuario, Usuario usuario) {
-        if (!repository.existsById(codigoUsuario)){
-            throw new IllegalArgumentException("No se encontro Usuario con el codigo:" + codigoUsuario);
-        }
-        usuario.setId(codigoUsuario);
-        validarUsuario(usuario);
-        return repository.save(usuario);
-    }
-
-    @Override
-    public void eliminar(Long codigoUsuario) {
-        if (!repository.existsById(codigoUsuario)){
-            throw new IllegalArgumentException("No se encontro Usuario con el codigo:" + codigoUsuario);
-        }
-        repository.deleteAllById(codigoUsuario);
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
     }
 
     @Override
     public Optional<Usuario> findByCodigoUsuario(Long codigoUsuario) {
-        return Optional.empty();
+        return usuarioRepository.findById(codigoUsuario);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public boolean existePorID(Long id) {
-        return repository.existsById(id);
+    public Usuario guardar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void eliminar(Long id) {
+        usuarioRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existePorId(Long id) {
+        return usuarioRepository.existsById(id);
     }
 
     @Override
     public List<Usuario> buscarPorEstadoConFor(Long estado) {
-        List<Usuario> usuarios = repository.findAll();
-        List<Usuario> filtrados = new ArrayList<>();
-        for (Usuario c :  usuarios) {
-            if (c.getEstado() == estado) {
-                filtrados.add(c);
-            }
-        }
-        return filtrados;
+        return usuarioRepository.findByEstado(estado);
     }
 
-    private void validarUsuario(Usuario usuario){
+    @Override
+    public boolean validarAcceso(String nameUser, String passwordUser) {
+        return usuarioRepository.findByNameUserAndPasswordUser(nameUser, passwordUser).isPresent();
+    }
 
+    @Override
+    public boolean existePorID(Long id) {
+        return usuarioRepository.existsById(id);
+    }
 
-         if (usuario.getNameUser() == null || usuario.getNameUser().trim().isEmpty()){
-             throw new IllegalArgumentException("Se necesita un usernamer para continuar");
-         }
-         if (usuario.getPasswordUser() == null || usuario.getPasswordUser().trim().isEmpty()){
-             throw new IllegalArgumentException("Se necesita que ingrese una contraseña");
-         }
-
+    @Override
+    public Usuario actualizar(Long id, Usuario usuario) {
+        if (existePorId(id)) {
+            usuario.setId(id);
+            return usuarioRepository.save(usuario);
+        }
+        throw new RuntimeException("Usuario no encontrado con id: " + id);
     }
 }
