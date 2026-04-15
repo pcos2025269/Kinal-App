@@ -1,82 +1,233 @@
 package com.pablocos.KinalApp1.controller;
 
-
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.DetalleVenta;
+import com.pablocos.KinalApp1.entity.Producto;
+import com.pablocos.KinalApp1.entity.Venta;
 import com.pablocos.KinalApp1.service.IDetalleVentaSerrvice;
+import com.pablocos.KinalApp1.service.IProductosService;
+import com.pablocos.KinalApp1.service.IVentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/detalleVenta")
 public class DetalleVentaController {
-    private final IDetalleVentaSerrvice detalleVentaSerrvice;
 
-    public DetalleVentaController(IDetalleVentaSerrvice detalleVentaSerrvice) {
-        this.detalleVentaSerrvice = detalleVentaSerrvice;
-    }
-    @GetMapping
-    public ResponseEntity<List<DetalleVenta>> listar(){
-        List<DetalleVenta> detalleVenta = detalleVentaSerrvice.listarTodos();
-        return ResponseEntity.ok(detalleVenta);
+    private final IDetalleVentaSerrvice detalleVentaService;
+    private final IProductosService productosService;
+    private final IVentaService ventaService;
+
+    public DetalleVentaController(IDetalleVentaSerrvice detalleVentaService,
+                                  IProductosService productosService,
+                                  IVentaService ventaService) {
+        this.detalleVentaService = detalleVentaService;
+        this.productosService = productosService;
+        this.ventaService = ventaService;
     }
 
-    @GetMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<DetalleVenta> buscarPorCode(@PathVariable Long codigoDetalleVenta){
-        return detalleVentaSerrvice.buscarPotCodigoUsuario(codigoDetalleVenta)
+    @GetMapping("/lista")
+    public String listarVista(@RequestParam(required = false) String buscar, Model model) {
+        List<DetalleVenta> detalles;
+
+        if (buscar != null && !buscar.trim().isEmpty()) {
+            try {
+                Long codigo = Long.parseLong(buscar);
+                var detalleOptional = detalleVentaService.buscarPotCodigoUsuario(codigo);
+
+                if (detalleOptional.isPresent()) {
+                    detalles = List.of(detalleOptional.get());
+                    model.addAttribute("buscar", buscar);
+                } else {
+                    detalles = detalleVentaService.listarTodos().stream()
+                            .filter(d -> d.getDetalleproducto().getNombreProducto().toLowerCase().contains(buscar.toLowerCase()))
+                            .toList();
+
+                    if (!detalles.isEmpty()) {
+                        model.addAttribute("buscar", buscar);
+                    } else {
+                        model.addAttribute("error", "No se encontraron detalles con: " + buscar);
+                        detalles = detalleVentaService.listarTodos();
+                    }
+                }
+            } catch (NumberFormatException e) {
+                detalles = detalleVentaService.listarTodos().stream()
+                        .filter(d -> d.getDetalleproducto().getNombreProducto().toLowerCase().contains(buscar.toLowerCase()))
+                        .toList();
+
+                if (!detalles.isEmpty()) {
+                    model.addAttribute("buscar", buscar);
+                } else {
+                    model.addAttribute("error", "No se encontraron detalles con: " + buscar);
+                    detalles = detalleVentaService.listarTodos();
+                }
+            }
+        } else {
+            detalles = detalleVentaService.listarTodos();
+        }
+
+        model.addAttribute("detalles", detalles);
+        return "DetalleVenta/lista";
+    }
+
+    @GetMapping("/nuevo")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("detalleVenta", new DetalleVenta());
+        model.addAttribute("productos", productosService.listarTodos());
+        model.addAttribute("ventas", ventaService.listarTodos());
+        return "DetalleVenta/formulario";
+    }
+
+    @PostMapping("/guardar")
+    public String guardarDetalleVenta(@RequestParam Long codigoProducto,
+                                      @RequestParam Long codigoVenta,
+                                      @RequestParam Long cantidad,
+                                      Model model) {
+        try {
+            Producto producto = productosService.buscarPorId(codigoProducto).orElse(null);
+            Venta venta = ventaService.buscarPorCodigoVenta(codigoVenta).orElse(null);
+
+            if (producto == null) {
+                model.addAttribute("error", "Producto no encontrado");
+                model.addAttribute("productos", productosService.listarTodos());
+                model.addAttribute("ventas", ventaService.listarTodos());
+                return "DetalleVenta/formulario";
+            }
+
+            if (venta == null) {
+                model.addAttribute("error", "Venta no encontrada");
+                model.addAttribute("productos", productosService.listarTodos());
+                model.addAttribute("ventas", ventaService.listarTodos());
+                return "DetalleVenta/formulario";
+            }
+
+            BigDecimal precioUnitario = producto.getPrecio();
+            BigDecimal subTotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+
+            DetalleVenta detalleVenta = new DetalleVenta();
+            detalleVenta.setDetalleproducto(producto);
+            detalleVenta.setDetalleVenta(venta);
+            detalleVenta.setCantidad(cantidad);
+            detalleVenta.setPrecioUnitario(precioUnitario);
+            detalleVenta.setSubTotal(subTotal);
+
+            detalleVentaService.guardar(detalleVenta);
+            return "redirect:/DetalleVenta/lista";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al guardar: " + e.getMessage());
+            model.addAttribute("productos", productosService.listarTodos());
+            model.addAttribute("ventas", ventaService.listarTodos());
+            return "DetalleVenta/formulario";
+        }
+    }
+
+    @GetMapping("/ver/{codigoDetalleVenta}")
+    public String verDetalle(@PathVariable Long codigoDetalleVenta, Model model) {
+        detalleVentaService.buscarPotCodigoUsuario(codigoDetalleVenta)
+                .ifPresentOrElse(
+                        detalle -> model.addAttribute("detalle", detalle),
+                        () -> model.addAttribute("error", "Detalle no encontrado")
+                );
+        return "DetalleVenta/detalle";
+    }
+
+    @GetMapping("/editar/{codigoDetalleVenta}")
+    public String mostrarFormularioEditar(@PathVariable Long codigoDetalleVenta, Model model) {
+        detalleVentaService.buscarPotCodigoUsuario(codigoDetalleVenta)
+                .ifPresentOrElse(
+                        detalle -> {
+                            model.addAttribute("detalleVenta", detalle);
+                            model.addAttribute("productos", productosService.listarTodos());
+                            model.addAttribute("ventas", ventaService.listarTodos());
+                        },
+                        () -> model.addAttribute("error", "Detalle no encontrado")
+                );
+        return "DetalleVenta/formulario";
+    }
+
+    @PostMapping("/actualizar/{codigoDetalleVenta}")
+    public String actualizarDetalleVenta(@PathVariable Long codigoDetalleVenta,
+                                         @RequestParam Long codigoProducto,
+                                         @RequestParam Long codigoVenta,
+                                         @RequestParam Long cantidad,
+                                         Model model) {
+        try {
+            Producto producto = productosService.buscarPorId(codigoProducto).orElse(null);
+            Venta venta = ventaService.buscarPorCodigoVenta(codigoVenta).orElse(null);
+
+            if (producto == null || venta == null) {
+                model.addAttribute("error", "Producto o Venta no encontrado");
+                return "DetalleVenta/formulario";
+            }
+
+            BigDecimal precioUnitario = producto.getPrecio();
+            BigDecimal subTotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+
+            DetalleVenta detalleVenta = new DetalleVenta();
+            detalleVenta.setCodigoDetalleVenta(codigoDetalleVenta);
+            detalleVenta.setDetalleproducto(producto);
+            detalleVenta.setDetalleVenta(venta);
+            detalleVenta.setCantidad(cantidad);
+            detalleVenta.setPrecioUnitario(precioUnitario);
+            detalleVenta.setSubTotal(subTotal);
+
+            detalleVentaService.actualizar(codigoDetalleVenta, detalleVenta);
+            return "redirect:/DetalleVenta/lista";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al actualizar: " + e.getMessage());
+            return "DetalleVenta/formulario";
+        }
+    }
+
+    @GetMapping("/eliminar/{codigoDetalleVenta}")
+    public String eliminarDetalleVenta(@PathVariable Long codigoDetalleVenta) {
+        if (detalleVentaService.existePorCodigo(codigoDetalleVenta)) {
+            detalleVentaService.eliminar(codigoDetalleVenta);
+        }
+        return "redirect:/DetalleVenta/lista";
+    }
+
+    @GetMapping("/api")
+    public ResponseEntity<List<DetalleVenta>> listarApi() {
+        return ResponseEntity.ok(detalleVentaService.listarTodos());
+    }
+
+    @GetMapping("/api/{codigoDetalleVenta}")
+    public ResponseEntity<DetalleVenta> buscarApi(@PathVariable Long codigoDetalleVenta) {
+        return detalleVentaService.buscarPotCodigoUsuario(codigoDetalleVenta)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody DetalleVenta detalleVenta){
-        try{
-            DetalleVenta nuevodetalle = detalleVentaSerrvice.guardar(detalleVenta);
-            return new ResponseEntity<>(nuevodetalle, HttpStatus.CREATED);
-        }catch (IllegalArgumentException e){
+    @PostMapping("/api")
+    public ResponseEntity<?> guardarApi(@RequestBody DetalleVenta detalleVenta) {
+        try {
+            return new ResponseEntity<>(detalleVentaService.guardar(detalleVenta), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<Void> eliminar (@PathVariable Long codigoDetalleVenta){
-        //ResponseEntity<void>: No devuelve cuerpo en la respuesta
-        try {
-            if (!detalleVentaSerrvice.existePorCodigo(codigoDetalleVenta)){
-                return ResponseEntity.notFound().build();
-            }
-            detalleVentaSerrvice.eliminar(codigoDetalleVenta);
-            return ResponseEntity.noContent().build();
-            //204 NO CONTENT (Se ejecuto correctamente y no devuelve cuerpo)
-        }catch (RuntimeException e){
+    @DeleteMapping("/api/{codigoDetalleVenta}")
+    public ResponseEntity<Void> eliminarApi(@PathVariable Long codigoDetalleVenta) {
+        if (!detalleVentaService.existePorCodigo(codigoDetalleVenta)) {
             return ResponseEntity.notFound().build();
-            // 404 NOT FOUND
         }
-
+        detalleVentaService.eliminar(codigoDetalleVenta);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<?> actualizar(@PathVariable Long codigoDetalleVenta,@RequestBody DetalleVenta detalleVenta){
+    @PutMapping("/api/{codigoDetalleVenta}")
+    public ResponseEntity<?> actualizarApi(@PathVariable Long codigoDetalleVenta, @RequestBody DetalleVenta detalleVenta) {
         try {
-            if (!detalleVentaSerrvice.existePorCodigo(codigoDetalleVenta)){
-
-                return ResponseEntity.notFound().build();
-            }
-            //Actualizamos el cliente pero puede lanzar una exception
-            DetalleVenta detalleActualizado = detalleVentaSerrvice.actualizar(codigoDetalleVenta,detalleVenta);
-            return ResponseEntity.ok(detalleActualizado);
-            //200 ok con el cliente ya actualizado
-        }catch (IllegalArgumentException e){
-            //Error cuando los datos sean incorrectos
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.ok(detalleVentaService.actualizar(codigoDetalleVenta, detalleVenta));
         } catch (RuntimeException e) {
-            //Posiblemente cualquier otro error como cliente no encontrado, etc
-            //404 NOT FOUND
             return ResponseEntity.notFound().build();
         }
     }
-
 }
