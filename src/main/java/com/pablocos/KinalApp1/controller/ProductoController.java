@@ -106,6 +106,7 @@ public class ProductoController {
                                      @ModelAttribute Producto producto,
                                      Model model) {
         try {
+            producto.setCodigoProducto(codigoProducto);
             productosService.actualizar(codigoProducto, producto);
             return "redirect:/productos/lista";
         } catch (RuntimeException e) {
@@ -122,7 +123,6 @@ public class ProductoController {
         return "redirect:/productos/lista";
     }
 
-    // API REST
     @GetMapping
     public ResponseEntity<List<Producto>> listar() {
         List<Producto> productos = productosService.listarTodos();
