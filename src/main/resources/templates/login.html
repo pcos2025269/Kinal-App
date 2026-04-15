@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="icon" href="./static/img/kinal.png" th:href="@{/img/kinal.png}">
-
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
- <div>
+ <div class="login-container">
+    <img th:src="@{/img/kinal.png}" alt="Logo Kinal" >
      <h2>Iniciar Sesión</h2>
 
      <div th:if="${param.error}" class="alert alert-error">
