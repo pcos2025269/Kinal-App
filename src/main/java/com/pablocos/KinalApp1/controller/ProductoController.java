@@ -1,16 +1,16 @@
 package com.pablocos.KinalApp1.controller;
 
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Producto;
-
 import com.pablocos.KinalApp1.service.IProductosService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/productos")
 public class ProductoController {
     private final IProductosService productosService;
@@ -19,62 +19,164 @@ public class ProductoController {
         this.productosService = productosService;
     }
 
+    @GetMapping("/lista")
+    public String listarVista(@RequestParam(required = false) String buscar, Model model) {
+        List<Producto> productos;
+
+        if (buscar != null && !buscar.trim().isEmpty()) {
+            try {
+                Long codigo = Long.parseLong(buscar);
+                var productoOptional = productosService.buscarPorId(codigo);
+
+                if (productoOptional.isPresent()) {
+                    productos = List.of(productoOptional.get());
+                    model.addAttribute("buscar", buscar);
+                } else {
+                    productos = productosService.listarTodos().stream()
+                            .filter(p -> p.getNombreProducto().toLowerCase().contains(buscar.toLowerCase()))
+                            .toList();
+
+                    if (!productos.isEmpty()) {
+                        model.addAttribute("buscar", buscar);
+                    } else {
+                        model.addAttribute("error", "No se encontraron productos con: " + buscar);
+                        productos = productosService.listarTodos();
+                    }
+                }
+            } catch (NumberFormatException e) {
+                productos = productosService.listarTodos().stream()
+                        .filter(p -> p.getNombreProducto().toLowerCase().contains(buscar.toLowerCase()))
+                        .toList();
+
+                if (!productos.isEmpty()) {
+                    model.addAttribute("buscar", buscar);
+                } else {
+                    model.addAttribute("error", "No se encontraron productos con: " + buscar);
+                    productos = productosService.listarTodos();
+                }
+            }
+        } else {
+            productos = productosService.listarTodos();
+        }
+
+        model.addAttribute("productos", productos);
+        return "productos/lista";
+    }
+
+    @GetMapping("/nuevo")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("producto", new Producto());
+        return "productos/formulario";
+    }
+
+    @PostMapping("/guardar")
+    public String guardarProducto(@ModelAttribute Producto producto, Model model) {
+        try {
+            productosService.guardar(producto);
+            return "redirect:/productos/lista";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("producto", producto);
+            return "productos/formulario";
+        }
+    }
+
+    @GetMapping("/ver/{codigoProducto}")
+    public String verDetalle(@PathVariable Long codigoProducto, Model model) {
+        productosService.buscarPorId(codigoProducto)
+                .ifPresentOrElse(
+                        producto -> model.addAttribute("producto", producto),
+                        () -> model.addAttribute("error", "Producto no encontrado")
+                );
+        return "productos/detalle";
+    }
+
+    @GetMapping("/editar/{codigoProducto}")
+    public String mostrarFormularioEditar(@PathVariable Long codigoProducto, Model model) {
+        productosService.buscarPorId(codigoProducto)
+                .ifPresentOrElse(
+                        producto -> model.addAttribute("producto", producto),
+                        () -> model.addAttribute("error", "Producto no encontrado")
+                );
+        return "productos/formulario";
+    }
+
+    @PostMapping("/actualizar/{codigoProducto}")
+    public String actualizarProducto(@PathVariable Long codigoProducto,
+                                     @ModelAttribute Producto producto,
+                                     Model model) {
+        try {
+            productosService.actualizar(codigoProducto, producto);
+            return "redirect:/productos/lista";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", "Producto no encontrado");
+            return "productos/formulario";
+        }
+    }
+
+    @GetMapping("/eliminar/{codigoProducto}")
+    public String eliminarProducto(@PathVariable Long codigoProducto) {
+        if (productosService.existePorcodigo(codigoProducto)) {
+            productosService.eliminar(codigoProducto);
+        }
+        return "redirect:/productos/lista";
+    }
+
+    // API REST
     @GetMapping
-    public ResponseEntity<List<Producto>> listar(){
+    public ResponseEntity<List<Producto>> listar() {
         List<Producto> productos = productosService.listarTodos();
         return ResponseEntity.ok(productos);
     }
 
-    @GetMapping("/{codigoProducto}")
-    public ResponseEntity<Producto> buscarPorCodigo(@PathVariable Long codigoProducto){
-        return  productosService.buscarPorId(codigoProducto)
+    @GetMapping("/api/{codigoProducto}")
+    public ResponseEntity<Producto> buscarPorCodigo(@PathVariable Long codigoProducto) {
+        return productosService.buscarPorId(codigoProducto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar (@RequestBody Producto producto){
-        try{
+    public ResponseEntity<?> guardar(@RequestBody Producto producto) {
+        try {
             Producto nuevoProducto = productosService.guardar(producto);
             return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
-        }catch (IllegalArgumentException e){
-            return  ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{codigoProducto}")
-    public ResponseEntity<Void> eliminar (@PathVariable Long codigoProducto){
-        try{
-            if(!productosService.existePorcodigo(codigoProducto)){
+    public ResponseEntity<Void> eliminar(@PathVariable Long codigoProducto) {
+        try {
+            if (!productosService.existePorcodigo(codigoProducto)) {
                 return ResponseEntity.notFound().build();
             }
             productosService.eliminar(codigoProducto);
             return ResponseEntity.noContent().build();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-
     }
 
     @PutMapping("/{codigoProducto}")
-    public ResponseEntity<?> actualizar(@PathVariable Long codigoProducto, @RequestBody Producto producto){
-        try{
-            if(!productosService.existePorcodigo(codigoProducto)){
+    public ResponseEntity<?> actualizar(@PathVariable Long codigoProducto, @RequestBody Producto producto) {
+        try {
+            if (!productosService.existePorcodigo(codigoProducto)) {
                 return ResponseEntity.notFound().build();
             }
-
-            Producto ProductoActualizado = productosService.actualizar(codigoProducto,producto);
-            return ResponseEntity.ok(ProductoActualizado);
-        }catch (IllegalArgumentException e){
+            Producto productoActualizado = productosService.actualizar(codigoProducto, producto);
+            return ResponseEntity.ok(productoActualizado);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/estado/{estado}")
     public ResponseEntity<List<Producto>> buscarPorEstado(@PathVariable Long estado) {
-        List<Producto>  productos = productosService.buscarrPorEstadoConFor(estado);
+        List<Producto> productos = productosService.buscarrPorEstadoConFor(estado);
         if (productos.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
