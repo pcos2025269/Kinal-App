@@ -70,7 +70,7 @@ public class ClienteController {
     }
 
     @GetMapping("/ver/{dpi}")
-    public String verDetalle(@PathVariable String dpi, Model model) {
+    public String verDetalle(@PathVariable(name = "dpi") String dpi, Model model) {
         clienteService.buscarPorDPI(dpi)
                 .ifPresentOrElse(
                         cliente -> model.addAttribute("cliente", cliente),
@@ -80,7 +80,7 @@ public class ClienteController {
     }
 
     @GetMapping("/editar/{dpi}")
-    public String mostrarFormularioEditar(@PathVariable String dpi, Model model) {
+    public String mostrarFormularioEditar(@PathVariable(name = "dpi") String dpi, Model model) {
         clienteService.buscarPorDPI(dpi)
                 .ifPresentOrElse(
                         cliente -> model.addAttribute("cliente", cliente),
@@ -90,7 +90,7 @@ public class ClienteController {
     }
 
     @PostMapping("/actualizar/{dpi}")
-    public String actualizarCliente(@PathVariable String dpi,
+    public String actualizarCliente(@PathVariable(name = "dpi") String dpi,
                                     @ModelAttribute Cliente cliente,
                                     Model model) {
         try {
@@ -103,7 +103,7 @@ public class ClienteController {
     }
 
     @GetMapping("/eliminar/{dpi}")
-    public String eliminarCliente(@PathVariable String dpi) {
+    public String eliminarCliente(@PathVariable(name = "dpi") String dpi) {
         if (clienteService.existePorDPI(dpi)) {
             clienteService.eliminar(dpi);
         }
@@ -117,7 +117,7 @@ public class ClienteController {
     }
 
     @GetMapping("/api/{dpi}")
-    public ResponseEntity<Cliente> buscarDPI(@PathVariable String dpi) {
+    public ResponseEntity<Cliente> buscarDPI(@PathVariable(name = "dpi") String dpi) {
         return clienteService.buscarPorDPI(dpi)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -134,7 +134,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{dpi}")
-    public ResponseEntity<Void> eliminar(@PathVariable String dpi) {
+    public ResponseEntity<Void> eliminar(@PathVariable(name = "dpi") String dpi) {
         try {
             if (!clienteService.existePorDPI(dpi)) {
                 return ResponseEntity.notFound().build();
@@ -147,7 +147,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{dpi}")
-    public ResponseEntity<?> actualizar(@PathVariable String dpi, @RequestBody Cliente cliente) {
+    public ResponseEntity<?> actualizar(@PathVariable(name = "dpi") String dpi, @RequestBody Cliente cliente) {
         try {
             if (!clienteService.existePorDPI(dpi)) {
                 return ResponseEntity.notFound().build();
@@ -162,7 +162,7 @@ public class ClienteController {
     }
 
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Cliente>> buscarPorEstado(@PathVariable Long estado) {
+    public ResponseEntity<List<Cliente>> buscarPorEstado(@PathVariable(name = "estado") Long estado) {
         List<Cliente> clientes = clienteService.buscarPorEstadoConFor(estado);
         if (clientes.isEmpty()) {
             return ResponseEntity.notFound().build();
