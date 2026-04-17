@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarId(@PathVariable Long id){
-        return usuarioService.findByCodigoUsuario(id)
+        return usuarioService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
