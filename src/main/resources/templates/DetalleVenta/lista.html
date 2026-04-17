@@ -2,46 +2,18 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Detalle Ventas</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>Lista de Detalles de Venta</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <div class="container mt-5">
   <div class="card shadow">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-      <h2 class="mb-0">
-        <i class="fas fa-list"></i> Detalle Ventas
-      </h2>
-      <a th:href="@{/detalleVenta/nuevo}" class="btn btn-light">
-        <i class="fas fa-plus"></i> Nuevo Detalle
-      </a>
+      <h2><i class="fas fa-list"></i> Detalle de Ventas</h2>
+      <a th:href="@{/detalleVenta/nuevo}" class="btn btn-light"><i class="fas fa-plus"></i> Nuevo Detalle</a>
     </div>
     <div class="card-body">
-      <div class="row mb-4">
-        <div class="col-md-8 mx-auto">
-          <form th:action="@{/detalleVenta/lista}" method="get" class="d-flex">
-            <input type="text"
-                   name="buscar"
-                   class="form-control me-2"
-                   placeholder="Buscar por Código o Producto..."
-                   th:value="${buscar}">
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-search"></i> Buscar
-            </button>
-            <a th:href="@{/detalleVenta/lista}" class="btn btn-secondary ms-2">
-              <i class="fas fa-sync-alt"></i> Limpiar
-            </a>
-          </form>
-        </div>
-      </div>
-
-      <div th:if="${error}" class="alert alert-warning alert-dismissible fade show">
-        <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-dark">
@@ -56,51 +28,24 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="detalle : ${detalles}">
-            <td th:text="${detalle.codigoDetalleVenta}"></td>
-            <td th:text="${detalle.detalleproducto.nombreProducto}"></td>
-            <td th:text="${detalle.cantidad}"></td>
-            <td>Q <span th:text="${detalle.precioUnitario}"></span></td>
-            <td>Q <span th:text="${detalle.subTotal}"></span></td>
-            <td th:text="${detalle.detalleVenta.codigoVenta}"></td>
+          <tr th:each="d : ${detalles}">
+            <td th:text="${d.codigoDetalleVenta}"></td>
+            <td th:text="${d.detalleproducto.nombreProducto}"></td>
+            <td th:text="${d.cantidad}"></td>
+            <td>Q <span th:text="${d.precioUnitario}"></span></td>
+            <td>Q <span th:text="${d.subTotal}"></span></td>
+            <td th:text="${d.detalleVenta.codigoVenta}"></td>
             <td>
-              <a th:href="@{/detalleVenta/ver/{id}(id=${detalle.codigoDetalleVenta})}"
-                 class="btn btn-sm btn-info me-1" title="Ver">
-                <i class="fas fa-eye"></i>
-              </a>
-              <a th:href="@{/detalleVenta/editar/{id}(id=${detalle.codigoDetalleVenta})}"
-                 class="btn btn-sm btn-warning me-1" title="Editar">
-                <i class="fas fa-edit"></i>
-              </a>
-              <a th:href="@{/detalleVenta/eliminar/{id}(id=${detalle.codigoDetalleVenta})}"
-                 class="btn btn-sm btn-danger"
-                 onclick="return confirm('¿Estás seguro de eliminar este detalle?')"
-                 title="Eliminar">
-                <i class="fas fa-trash"></i>
-              </a>
+              <a th:href="@{/detalleVenta/ver/{id}(id=${d.codigoDetalleVenta})}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
             </td>
           </tr>
-          <tr th:if="${detalles.empty}">
-            <td colspan="7" class="text-center py-4">
-              <i class="fas fa-info-circle"></i> No hay detalles registrados
-            </td>
-          </tr>
+          <tr th:if="${detalles.empty}"><td colspan="7">No hay detalles registrados</td></tr>
           </tbody>
         </table>
       </div>
-
-      <div th:if="${not detalles.empty}" class="mt-2 text-muted">
-        <small>Total: <strong th:text="${detalles.size()}"></strong> detalle(s)</small>
-      </div>
-
-      <div class="mt-3">
-        <a th:href="@{/}" class="btn btn-secondary">
-          <i class="fas fa-arrow-left"></i> Volver al menú
-        </a>
-      </div>
+      <a th:href="@{/Inicio}" class="btn btn-secondary">Volver al menú</a>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
