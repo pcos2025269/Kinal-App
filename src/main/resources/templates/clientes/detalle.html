@@ -23,19 +23,19 @@
           <table class="table table-bordered">
             <tr>
               <th class="bg-light">DPI:</th>
-              <td th:text="${cliente.dpi}"></td>
+              <td th:text="${cliente.DPICliente}"></td>
             </tr>
             <tr>
               <th class="bg-light">Nombre:</th>
-              <td th:text="${cliente.nombre}"></td>
+              <td th:text="${cliente.nombreCliente}"></td>
             </tr>
             <tr>
               <th class="bg-light">Apellido:</th>
-              <td th:text="${cliente.apellido}"></td>
+              <td th:text="${cliente.apellidoCliente}"></td>
             </tr>
             <tr>
               <th class="bg-light">Dirección:</th>
-              <td th:text="${cliente.direccion}"></td>
+              <td th:text="${cliente.direccionCliente}"></td>
             </tr>
             <tr>
               <th class="bg-light">Estado:</th>
@@ -52,7 +52,7 @@
         <a th:href="@{/clientes/lista}" class="btn btn-secondary">
           <i class="fas fa-arrow-left"></i> Volver
         </a>
-        <a th:if="${cliente}" th:href="@{/clientes/editar/{dpi}(dpi=${cliente.dpi})}"
+        <a th:if="${cliente}" th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}"
            class="btn btn-warning">
           <i class="fas fa-edit"></i> Editar
         </a>
