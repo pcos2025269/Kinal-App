@@ -3,6 +3,7 @@ package com.pablocos.KinalApp1.service;
 import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +67,8 @@ public class UserService implements IUsuarioService{
     }
 
     @Override
-    public Optional<Usuario> findByCodigoUsuario(Long codigoUsuario) {
-        return Optional.empty();
+    public Optional<Usuario> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
@@ -86,6 +87,12 @@ public class UserService implements IUsuarioService{
             }
         }
         return filtrados;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Usuario> listarUsuarios() {
+        return repository.findAll();
     }
 
     private void validarUsuario(Usuario usuario){
