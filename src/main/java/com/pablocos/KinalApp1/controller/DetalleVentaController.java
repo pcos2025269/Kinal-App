@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/detalleVenta")
+@RequestMapping("/DetalleVenta")
 public class DetalleVentaController {
 
     private final IDetalleVentaService detalleVentaService;
@@ -33,7 +33,7 @@ public class DetalleVentaController {
     public String listarVista(@RequestParam(name = "buscar", required = false) String buscar, Model model) {
         List<DetalleVenta> detalles = detalleVentaService.listarTodos();
         model.addAttribute("detalles", detalles);
-        return "detalleVenta/lista";
+        return "DetalleVenta/lista";
     }
 
     @GetMapping("/nuevo")
@@ -41,7 +41,7 @@ public class DetalleVentaController {
         model.addAttribute("detalleVenta", new DetalleVenta());
         model.addAttribute("productos", productosService.listarTodos());
         model.addAttribute("ventas", ventaService.listarVentas());
-        return "detalleVenta/formulario";
+        return "DetalleVenta/formulario";
     }
 
     @PostMapping("/guardar")
@@ -55,7 +55,7 @@ public class DetalleVentaController {
             if (producto == null || venta == null) {
                 model.addAttribute("error", "Producto o Venta no válidos");
                 cargarDatosFormulario(model);
-                return "detalleVenta/formulario";
+                return "DetalleVenta/formulario";
             }
             BigDecimal precioUnitario = producto.getPrecio();
             BigDecimal subTotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
@@ -68,11 +68,11 @@ public class DetalleVentaController {
             detalleVenta.setSubTotal(subTotal);
 
             detalleVentaService.guardar(detalleVenta);
-            return "redirect:/detalleVenta/lista";
+            return "redirect:/DetalleVenta/lista";
         } catch (Exception e) {
             model.addAttribute("error", "Error al guardar: " + e.getMessage());
             cargarDatosFormulario(model);
-            return "detalleVenta/formulario";
+            return "DetalleVenta/formulario";
         }
     }
 
@@ -81,7 +81,7 @@ public class DetalleVentaController {
         DetalleVenta detalle = detalleVentaService.buscarPorId(codigoDetalleVenta).orElse(null);
         model.addAttribute("detalle", detalle);
         if (detalle == null) model.addAttribute("error", "Detalle no encontrado");
-        return "detalleVenta/detalle";
+        return "DetalleVenta/detalle";
     }
 
     private void cargarDatosFormulario(Model model) {

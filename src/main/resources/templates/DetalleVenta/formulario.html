@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
       <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-      <form action="/detalleVenta/guardar" method="post">
+      <form action="/DetalleVenta/guardar" method="post">
         <div class="mb-3">
           <label>Producto</label>
           <select name="codigoProducto" class="form-select" required>
@@ -34,7 +34,7 @@
           <input type="number" name="cantidad" class="form-control" required min="1">
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a th:href="@{/detalleVenta/lista}" class="btn btn-secondary">Cancelar</a>
+        <a th:href="@{/DetalleVenta/lista}" class="btn btn-secondary">Cancelar</a>
       </form>
     </div>
   </div>
