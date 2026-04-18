@@ -1,11 +1,21 @@
  # KinalApp 
- Este proyecto nos ayuda a llevar un control sobre ventas, clientes 
+ Este proyecto es una aplicación web desarrollada con Spring Boot que nos ayuda a llevar un control sobre ventas, clientes, productos y usuarios. Proporciona un CRUD completo para cada entidad con una interfaz amigable usando Thymeleaf. 
 
 ## Tecnologias Utilizadas
 * **Java 21**
 * **Spring Boot 4.0.2**
 * **Maven (Gestor De Dependencias)**
 * **MySQL (Sistema Gestor De Bases De Datos)**
+
+## Funcionalidades
+
+* Gestion de Clientes (CRUD)
+* Gestion de Productos (CRUD)
+* Gestion de Ventas (CRUD)
+* Gestion de DetalleVentas (CRUD)
+* Gestion de Usuarios (CRUD)
+* Interfaz web con diseño responsive
+* API Rest
 
 ## Requisitos Previos
 Antes del proyecto es importante tener:
