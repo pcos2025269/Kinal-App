@@ -42,5 +42,26 @@ cd KinalApp1
 
 # Acceder a la aplicación
 
-Abre tu navegador y ve a: http://localhost:8081
+Abre tu navegador y ve a: http://localhost:8081/login
+
+# Estructura del proyecto
+
+```bash
+KinalApp1/
+    ├── src/main/java/com/pablocos/KinalApp1/
+    │   ├── controller/     # Controladores MVC y REST
+    │   ├── entity/         # Entidades JPA
+    │   ├── repository/     # Repositorios JPA
+    │   └── service/        # Servicios (lógica de negocio)
+    ├── src/main/resources/
+    │   ├── static/css/     # Archivos CSS
+    │   └── templates/      # Plantillas Thymeleaf
+    │       ├── clientes/
+    │       ├── productos/
+    │       ├── venta/
+    │       ├── DetalleVenta/
+    │       └── users/
+    └── pom.xml             # Dependencias del proyecto
+```
+
 
