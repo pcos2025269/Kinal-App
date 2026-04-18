@@ -40,4 +40,7 @@ public class LoginController {
     public String Inicio() {
         return "Inicio";
     }
+
+    @GetMapping("/Register")
+    public String mostrarRegistro() { return "Register"; }
 }
