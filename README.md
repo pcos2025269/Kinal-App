@@ -63,5 +63,21 @@ KinalApp1/
     │       └── users/
     └── pom.xml             # Dependencias del proyecto
 ```
+## Endpoints Principales
 
+| Módulo         | URL                           | Descripción                   |
+|----------------|-------------------------------|-------------------------------|
+| Clientes       | `/clientes/lista`             | Listar clientes               |
+| Productos      | `/productos/lista`            | Listar productos              |
+| Ventas         | `/venta/lista`                | Listar ventas                 |
+| Detalle Venta  | `/DetalleVenta/lista`         | Listar detalles de venta      |
+| Usuarios       | `/users/lista`                | Listar usuarios               |
+
+## Autor
+
+* Pablo José Cos Taracena
+
+## Licencia 
+
+Proyecto Academico
 
