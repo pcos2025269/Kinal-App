@@ -15,7 +15,7 @@
             <span th:if="${param.error[0] == 'existe'}">El nombre de usuario ya está en uso.</span>
         </div>
 
-        <form th:action="@{/registro}" method="post">
+        <form th:action="@{/Register}" method="post">
             <div class="input-group">
                 <span class="input-icon"><i class="fa fa-user"></i></span>
                 <input type="text" name="nameUser" placeholder="Nombre de usuario" required autofocus>
