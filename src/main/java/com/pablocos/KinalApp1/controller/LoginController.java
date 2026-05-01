@@ -25,16 +25,11 @@ public class LoginController {
     @GetMapping("/login")
     public String index(){return "login";}
 
-    @PostMapping("/login")
-    public String login(@RequestParam("nameUser") String nameUser,
-                        @RequestParam("passwordUser") String passwordUser)  {
-        boolean isAuth = usuarioService.validarAcceso(nameUser, passwordUser);
-        if (isAuth) {
-            return "redirect:/Inicio";
-        } else {
-            return "redirect:/login?error=true";
-        }
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/login";
     }
+
 
     @GetMapping("/Inicio")
     public String Inicio() {
