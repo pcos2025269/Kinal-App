@@ -27,14 +27,14 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain (HttpSecurity http){
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/login").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/login","/Register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/",true)
+                        .defaultSuccessUrl("/Inicio",true)
                         .permitAll()
 
                 )
