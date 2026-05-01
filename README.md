@@ -7,6 +7,8 @@
 * **Spring Boot 4.0.2**
 * **Maven (Gestor De Dependencias)**
 * **MySQL (Sistema Gestor De Bases De Datos)**
+* **SpringSecurity (Autenticación y Autorización de datos)**
+* **ByCript(Encriptación de Contraseñas)**
 
 ## Funcionalidades
 
