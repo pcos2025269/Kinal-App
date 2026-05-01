@@ -35,7 +35,7 @@ public class RegisterController {
         nuevoUsuario.setPasswordUser(passwordEncoder.encode(passwordUser));
         nuevoUsuario.setEmail(email);
         nuevoUsuario.setEstado(1L);
-        nuevoUsuario.setRol("usuario");
+        nuevoUsuario.setRol("USER");
 
         repository.save(nuevoUsuario);
 
