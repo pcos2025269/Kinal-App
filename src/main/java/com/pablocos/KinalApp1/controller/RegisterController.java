@@ -18,16 +18,16 @@ public class RegisterController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/registro")
+    @GetMapping("/Register")
     public String mostrarRegistro() {
-        return "registro";
+        return "Register";
     }
 
-    @PostMapping("/registro")
+    @PostMapping("/Register")
     public String registrarUsuario(@RequestParam String nameUser, @RequestParam String passwordUser, @RequestParam String email) {
 
         if (repository.findByNameUser(nameUser).isPresent()) {
-            return "redirect:/registro?error=existe";
+            return "redirect:/Register?error=existe";
         }
 
         Usuario nuevoUsuario = new Usuario();
