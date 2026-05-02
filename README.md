@@ -39,6 +39,19 @@ La aplicación implementa Spring Security 6 para proteger los recursos y control
 | `/css/**`   | Archivos de estilos      |
 | `/js/**`    | Archivos JavaScript      |
 | `/img/**`   | Imágenes estáticas       |
+
+### Flujo de autenticación
+  * Usuario ingresa credenciales 
+  * ↓
+  * Spring Security intercepta POST /login
+  * ↓
+  * CustomUserDetailsService busca el usuario en la BD
+  * ↓
+  * BCryptPasswordEncoder compara la contraseña
+  * ↓
+  * ¿Correcto? → Redirige a /Inicio
+  * ¿Incorrecto? → Redirige a /login?error=true
+
 ## Requisitos Previos
 Antes del proyecto es importante tener:
 * JDK 17 o superior instalado
@@ -73,6 +86,9 @@ KinalApp1/
     │   ├── controller/     # Controladores MVC y REST
     │   ├── entity/         # Entidades JPA
     │   ├── repository/     # Repositorios JPA
+    │   ├── security/
+    │   │   └── config/         # Configuración de Spring Security
+    │   │     └── SecurityConfig.java
     │   └── service/        # Servicios (lógica de negocio)
     ├── src/main/resources/
     │   ├── static/css/     # Archivos CSS
