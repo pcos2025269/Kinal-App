@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain (HttpSecurity http){
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/login","/Register").permitAll()
+                        .requestMatchers("/css/**","/img/**","/js/**", "/login","/Register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

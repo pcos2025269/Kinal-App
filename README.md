@@ -19,7 +19,26 @@
 * Gestion de Usuarios (CRUD)
 * Interfaz web con diseño responsive
 * API Rest
+* Autenticación de usuarios con Spring Security
 
+## Seguridad
+
+La aplicación implementa Spring Security 6 para proteger los recursos y controlar el acceso según el rol del usuario.
+
+## Roles
+| Rol     | Acceso                                                                             |
+|---------|------------------------------------------------------------------------------------|
+| `ADMIN` | Acceso completo: gestión de usuarios, eliminar, configurar (aun sin aplicamiento)  |
+| `USER`  | Acceso limitado: consulta y operaciones básicas            (aun sin aplicamiento)  |
+
+### Rutas públicas (sin autenticación)
+| URL         | Descripción              |
+|-------------|--------------------------|
+| `/login`    | Página de inicio de sesión |
+| `/registro` | Página de registro de usuario |
+| `/css/**`   | Archivos de estilos      |
+| `/js/**`    | Archivos JavaScript      |
+| `/img/**`   | Imágenes estáticas       |
 ## Requisitos Previos
 Antes del proyecto es importante tener:
 * JDK 17 o superior instalado
