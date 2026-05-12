@@ -20,12 +20,6 @@ public class UserService implements IUsuarioService{
         this.repository = repository;
     }
 
-    @Override
-    public boolean validarAcceso(String nameUser, String passwordUser) {
-        return repository.findByNameUser(nameUser)
-                .map(u -> u.getPasswordUser().equals(passwordUser))
-                .orElse(false);
-    }
 
     @Override
     @Transactional(readOnly = true)
