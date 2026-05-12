@@ -1,17 +1,14 @@
 package com.pablocos.KinalApp1.controller;
 
-import com.pablocos.KinalApp1.entity.Cliente;
-import com.pablocos.KinalApp1.entity.Usuario;
-import com.pablocos.KinalApp1.entity.Venta;
-import com.pablocos.KinalApp1.service.IClienteService;
-import com.pablocos.KinalApp1.service.IUsuarioService;
-import com.pablocos.KinalApp1.service.IVentaService;
+import com.pablocos.KinalApp1.entity.*;
+import com.pablocos.KinalApp1.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,13 +18,19 @@ public class VentaController {
     private final IVentaService ventaService;
     private final IClienteService clienteService;
     private final IUsuarioService usuarioService;
+    private final IProductosService productosService;
+    private final IDetalleVentaService detalleVentaService;
 
     public VentaController(IVentaService ventaService,
                            IClienteService clienteService,
-                           IUsuarioService usuarioService) {
+                           IUsuarioService usuarioService,
+                           IProductosService productosService,
+                           IDetalleVentaService detalleVentaService) {
         this.ventaService = ventaService;
         this.clienteService = clienteService;
         this.usuarioService = usuarioService;
+        this.productosService = productosService;
+        this.detalleVentaService = detalleVentaService;
     }
 
     // Listar todas las ventas
@@ -51,38 +54,82 @@ public class VentaController {
     @PostMapping("/guardar")
     public String guardarVenta(@RequestParam(name = "dpiCliente") String dpiCliente,
                                @RequestParam(name = "idUsuario") Long idUsuario,
-                               @RequestParam(name = "total") BigDecimal total,
                                @RequestParam(name = "fechaVenta") String fechaVenta,
                                @RequestParam(name = "estado") Long estado,
+                               @RequestParam(name = "codigoProducto", required = false) List<Long> codigosProducto,
+                               @RequestParam(name = "cantidad", required = false) List<Long> cantidades,
                                Model model) {
-        System.out.println("DPI recibido: '" + dpiCliente + "'");
-        System.out.println("ID Usuario recibido: " + idUsuario);
         try {
-            String dpiLimpio = dpiCliente.trim();
-            Cliente cliente = clienteService.buscarPorDPI(dpiLimpio).orElse(null);
+            // Validar cliente y usuario
+            Cliente cliente = clienteService.buscarPorDPI(dpiCliente.trim()).orElse(null);
             Usuario usuario = (idUsuario != null) ? usuarioService.findById(idUsuario).orElse(null) : null;
 
             if (cliente == null) {
-                System.out.println("Cliente NO encontrado con DPI: " + dpiLimpio);
-                model.addAttribute("error", "Cliente no válido (DPI: " + dpiLimpio + ")");
+                model.addAttribute("error", "Cliente no válido (DPI: " + dpiCliente + ")");
                 cargarDatosFormulario(model);
                 return "venta/formulario";
             }
             if (usuario == null) {
-                System.out.println("Usuario NO encontrado con ID: " + idUsuario);
                 model.addAttribute("error", "Usuario no válido (ID: " + idUsuario + ")");
                 cargarDatosFormulario(model);
                 return "venta/formulario";
             }
 
+            // Validar que venga al menos un producto
+            if (codigosProducto == null || codigosProducto.isEmpty()) {
+                model.addAttribute("error", "Debe agregar al menos un producto a la venta.");
+                cargarDatosFormulario(model);
+                return "venta/formulario";
+            }
+
+            // Construir detalles y calcular total
+            List<DetalleVenta> detalles = new ArrayList<>();
+            BigDecimal total = BigDecimal.ZERO;
+
+            for (int i = 0; i < codigosProducto.size(); i++) {
+                Long codProd = codigosProducto.get(i);
+                Long cantidad = (cantidades != null && i < cantidades.size()) ? cantidades.get(i) : 1L;
+
+                if (codProd == null || cantidad == null || cantidad <= 0) continue;
+
+                Producto producto = productosService.buscarPorId(codProd).orElse(null);
+                if (producto == null) continue;
+
+                BigDecimal precioUnitario = producto.getPrecio();
+                BigDecimal subTotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+                total = total.add(subTotal);
+
+                DetalleVenta detalle = new DetalleVenta();
+                detalle.setDetalleproducto(producto);
+                detalle.setCantidad(cantidad);
+                detalle.setPrecioUnitario(precioUnitario);
+                detalle.setSubTotal(subTotal);
+                detalles.add(detalle);
+            }
+
+            if (detalles.isEmpty()) {
+                model.addAttribute("error", "No se encontraron productos válidos. Verifique la selección.");
+                cargarDatosFormulario(model);
+                return "venta/formulario";
+            }
+
+            // Guardar la venta primero
             Venta venta = new Venta();
             venta.setClienteVenta(cliente);
             venta.setUsuarioVenta(usuario);
             venta.setTotal(total);
             venta.setEstado(estado);
             venta.setFechaVenta(LocalDate.parse(fechaVenta));
-            ventaService.guardar(venta);
+            Venta ventaGuardada = ventaService.guardar(venta);
+
+            // Guardar cada detalle asociado a la venta
+            for (DetalleVenta detalle : detalles) {
+                detalle.setDetalleVenta(ventaGuardada);
+                detalleVentaService.guardar(detalle);
+            }
+
             return "redirect:/venta/lista";
+
         } catch (Exception e) {
             model.addAttribute("error", "Error al guardar: " + e.getMessage());
             cargarDatosFormulario(model);
@@ -109,6 +156,7 @@ public class VentaController {
         model.addAttribute("venta", venta);
         model.addAttribute("clientes", clienteService.listarTodos());
         model.addAttribute("usuarios", usuarioService.listarTodos());
+        model.addAttribute("productos", productosService.listarTodos());
         return "venta/formulario";
     }
 
@@ -126,12 +174,13 @@ public class VentaController {
             Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
             if (cliente == null || usuario == null) {
                 model.addAttribute("error", "Cliente o Usuario no válido");
+                cargarDatosFormulario(model);
                 return "venta/formulario";
             }
             Venta venta = ventaService.buscarPorCodigoVenta(codigoVenta).orElse(null);
             if (venta == null) {
                 model.addAttribute("error", "Venta no encontrada");
-                return "venta/formulario";
+                return "redirect:/venta/lista";
             }
             venta.setClienteVenta(cliente);
             venta.setUsuarioVenta(usuario);
@@ -142,6 +191,7 @@ public class VentaController {
             return "redirect:/venta/lista";
         } catch (Exception e) {
             model.addAttribute("error", "Error al actualizar: " + e.getMessage());
+            cargarDatosFormulario(model);
             return "venta/formulario";
         }
     }
@@ -156,5 +206,6 @@ public class VentaController {
     private void cargarDatosFormulario(Model model) {
         model.addAttribute("clientes", clienteService.listarTodos());
         model.addAttribute("usuarios", usuarioService.listarTodos());
+        model.addAttribute("productos", productosService.listarTodos());
     }
 }
