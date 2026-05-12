@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
@@ -31,7 +31,7 @@
             <span class="btn-title">DetalleVenta</span>
         </a>
 
-        <a th:href="@{/users/lista}" class="btn-clientes">
+        <a th:href="@{/users/lista}" class="btn-clientes" sec:authorize="hasRole('ADMIN')">
             <div class="btn-icon"></div>
             <span class="btn-title">Usuarios</span>
         </a>
