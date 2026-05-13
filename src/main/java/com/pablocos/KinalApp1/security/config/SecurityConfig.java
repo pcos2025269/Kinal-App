@@ -32,12 +32,18 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/venta/editar/**").hasRole("ADMIN")
                         .requestMatchers("/venta/eliminar/**").hasRole("ADMIN")
+                        .requestMatchers("/clientes/editar").hasRole("ADMIN")
+                        .requestMatchers("/clientes/eliminar").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/error403")
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/Inicio",true)
+                        .failureForwardUrl("/login?error=true")
                         .permitAll()
 
                 )
