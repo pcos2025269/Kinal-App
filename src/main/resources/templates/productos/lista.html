@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,13 +71,13 @@
                                 <i class="fas fa-eye"></i>
                             </a>
                             <a th:href="@{/productos/editar/{id}(id=${producto.codigoProducto})}"
-                               class="btn btn-sm btn-warning me-1" title="Editar">
+                               class="btn btn-sm btn-warning me-1" title="Editar" sec:authorize="hasRole('ADMIN')">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a th:href="@{/productos/eliminar/{id}(id=${producto.codigoProducto})}"
                                class="btn btn-sm btn-danger"
                                onclick="return confirm('¿Estás seguro de eliminar este producto?')"
-                               title="Eliminar">
+                               title="Eliminar" sec:authorize="hasRole('ADMIN')">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
