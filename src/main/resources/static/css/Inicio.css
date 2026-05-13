@@ -90,3 +90,16 @@ body {
 .btn-ventas .btn-title {
     color: #e67e22;
 }
+
+.btn-return {
+background-color: #FF350D;
+color: #2c3e50;
+block:quote;
+text-decoration: none;
+padding: 12px 25px;
+border-radius: 8px;
+transition: 0.25s ease;
+position: fixed;
+top: 20px;
+left: 20px;
+}
