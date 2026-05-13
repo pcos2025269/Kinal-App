@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Lista de Ventas</title>
@@ -35,8 +35,8 @@
             </td>
             <td>
               <a th:href="@{/venta/ver/{id}(id=${v.codigoVenta})}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-              <a th:href="@{/venta/editar/{id}(id=${v.codigoVenta})}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-              <a th:href="@{/venta/eliminar/{id}(id=${v.codigoVenta})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')"><i class="fas fa-trash"></i></a>
+              <a th:href="@{/venta/editar/{id}(id=${v.codigoVenta})}" class="btn btn-sm btn-warning" sec:authorize="hasRole('ADMIN')"><i class="fas fa-edit"></i></a>
+              <a th:href="@{/venta/eliminar/{id}(id=${v.codigoVenta})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')" sec:authorize="hasRole('ADMIN')"><i class="fas fa-trash"></i></a>
             </td>
           </tr>
           <tr th:if="${ventas.empty}"><td colspan="7">No hay ventas registradas</td></tr>

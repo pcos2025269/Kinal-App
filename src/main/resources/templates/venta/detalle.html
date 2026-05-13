@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Detalle de Venta</title>
@@ -27,7 +27,7 @@
         </p>
       </div>
       <a th:href="@{/venta/lista}" class="btn btn-secondary">Volver</a>
-      <a th:if="${venta != null}" th:href="@{/venta/editar/{id}(id=${venta.codigoVenta})}" class="btn btn-warning">Editar</a>
+      <a th:if="${venta != null}" th:href="@{/venta/editar/{id}(id=${venta.codigoVenta})}" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">Editar</a>
     </div>
   </div>
 </div>
