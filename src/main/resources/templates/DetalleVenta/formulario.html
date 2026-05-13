@@ -15,7 +15,7 @@
     </div>
     <div class="card-body">
       <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-      <form action="/DetalleVenta/guardar" method="post">
+      <form th:action="@{/DetalleVenta/guardar}" method="post">
         <div class="mb-3">
           <label>Producto</label>
           <select name="codigoProducto" class="form-select" required>
