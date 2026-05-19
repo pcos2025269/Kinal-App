@@ -2,24 +2,22 @@ package com.pablocos.KinalApp1.service;
 
 import com.pablocos.KinalApp1.entity.Usuario;
 import com.pablocos.KinalApp1.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Transactional
-public class UserService implements IUsuarioService{
+public class UserService implements IUsuarioService {
 
-    @Autowired
     private final UsuarioRepository repository;
 
     public UserService(UsuarioRepository repository) {
         this.repository = repository;
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -73,7 +71,7 @@ public class UserService implements IUsuarioService{
     public List<Usuario> buscarPorEstadoConFor(Long estado) {
         List<Usuario> usuarios = repository.findAll();
         List<Usuario> filtrados = new ArrayList<>();
-        for (Usuario c :  usuarios) {
+        for (Usuario c : usuarios) {
             if (c.getEstado() == estado) {
                 filtrados.add(c);
             }
@@ -87,15 +85,12 @@ public class UserService implements IUsuarioService{
         return repository.findAll();
     }
 
-    private void validarUsuario(Usuario usuario){
-
-
+    private void validarUsuario(Usuario usuario) {
         if (usuario.getNameUser() == null || usuario.getNameUser().trim().isEmpty()){
             throw new IllegalArgumentException("Se necesita un usernamer para continuar");
         }
         if (usuario.getPasswordUser() == null || usuario.getPasswordUser().trim().isEmpty()){
             throw new IllegalArgumentException("Se necesita que ingrese una contraseña");
         }
-
     }
 }
