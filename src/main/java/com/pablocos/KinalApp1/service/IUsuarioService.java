@@ -19,6 +19,8 @@ public interface IUsuarioService {
 
     Optional<Usuario> findById(Long id);
 
+    Optional<Usuario> buscarPorNombreUsuario(String nombreUsuario);
+
     boolean existePorID(Long id);
 
     List<Usuario> buscarPorEstadoConFor(Long estado);

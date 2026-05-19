@@ -63,6 +63,12 @@ public class UserService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<Usuario> buscarPorNombreUsuario(String nombreUsuario) {
+        return repository.findByNameUser(nombreUsuario);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean existePorID(Long id) {
         return repository.existsById(id);
     }
