@@ -1,6 +1,5 @@
 package com.pablocos.KinalApp1.service;
 
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Producto;
 import com.pablocos.KinalApp1.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ProductoService implements IProductosService {
+
     private final ProductoRepository productoRepository;
 
     public ProductoService(ProductoRepository productoRepository) {
@@ -27,7 +27,6 @@ public class ProductoService implements IProductosService {
 
     @Override
     public Producto guardar(Producto producto) {
-
         validarProducto(producto);
         if (producto.getEstado() == 0)
             producto.setEstado(1L);
@@ -42,7 +41,7 @@ public class ProductoService implements IProductosService {
 
     @Override
     public Producto actualizar(Long codigoProducto, Producto producto) {
-        if(!productoRepository.existsById(codigoProducto)){
+        if (!productoRepository.existsById(codigoProducto)){
             throw new RuntimeException("El producto no se encontro con el codigo: " + codigoProducto);
         }
         producto.setCodigoProducto(codigoProducto);
@@ -55,6 +54,7 @@ public class ProductoService implements IProductosService {
         if (!productoRepository.existsById(codigoProducto)){
             throw new RuntimeException("El producto no se encontro con el codigo: " + codigoProducto);
         }
+        productoRepository.deleteById(codigoProducto);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ProductoService implements IProductosService {
     public List<Producto> buscarrPorEstadoConFor(Long Estado) {
         List<Producto> productos = productoRepository.findAll();
         List<Producto> filtrados = new ArrayList<>();
-        for (Producto c :  productos) {
+        for (Producto c : productos) {
             if (c.getEstado() == Estado) {
                 filtrados.add(c);
             }
@@ -75,8 +75,7 @@ public class ProductoService implements IProductosService {
         return filtrados;
     }
 
-
-    private void validarProducto(Producto producto){
+    private void validarProducto(Producto producto) {
         if (producto.getNombreProducto() == null || producto.getNombreProducto().trim().isEmpty()){
             throw new IllegalArgumentException("El Nombre del producto es obligatorio");
         }

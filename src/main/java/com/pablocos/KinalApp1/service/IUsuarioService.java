@@ -1,14 +1,11 @@
 package com.pablocos.KinalApp1.service;
 
-import com.pablocos.KinalApp1.entity.Cliente;
 import com.pablocos.KinalApp1.entity.Usuario;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IUsuarioService {
-
 
     List<Usuario> listarTodos();
 
@@ -21,9 +18,10 @@ public interface IUsuarioService {
     void eliminar(Long id);
 
     Optional<Usuario> findById(Long id);
+
     boolean existePorID(Long id);
 
     List<Usuario> buscarPorEstadoConFor(Long estado);
 
-    @Nullable Object listarUsuarios();
+    List<Usuario> listarUsuarios();
 }
