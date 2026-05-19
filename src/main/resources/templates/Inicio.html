@@ -7,9 +7,11 @@
 </head>
 <body>
 <div class="container">
-    <a th:href="@{/login?logout}" class="btn-return">
-        <span class="btn-title">Volver a Login</span>
-    </a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-return">
+            <span class="btn-title">Cerrar Sesión</span>
+        </button>
+    </form>
     <h1></h1>
     <p class="subtitle">Kinal App Elije un Crud a Usar </p>
 
