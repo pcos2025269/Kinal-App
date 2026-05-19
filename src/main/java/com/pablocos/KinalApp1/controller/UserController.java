@@ -21,8 +21,37 @@ public class UserController {
     }
 
     @GetMapping("/lista")
-    public String listarUsuarios(Model model) {
-        model.addAttribute("usuarios", usuarioService.listarTodos());
+    public String listarUsuarios(@RequestParam(name = "buscar", required = false) String buscar,
+                                 Model model) {
+
+        List<Usuario> usuarios;
+
+        if (buscar != null && !buscar.trim().isEmpty()) {
+
+            var usuarioOptional = usuarioService.buscarPorNombreUsuario(buscar);
+
+            if (usuarioOptional.isPresent()) {
+                usuarios = List.of(usuarioOptional.get());
+                model.addAttribute("buscar", buscar);
+            } else {
+                usuarios = usuarioService.listarTodos().stream()
+                        .filter(u ->
+                                u.getNameUser().toLowerCase().contains(buscar.toLowerCase()) ||
+                                        u.getEmail().toLowerCase().contains(buscar.toLowerCase()))
+                        .toList();
+
+                if (!usuarios.isEmpty()) {
+                    model.addAttribute("buscar", buscar);
+                } else {
+                    model.addAttribute("error", "No se encontraron usuarios con: " + buscar);
+                    usuarios = usuarioService.listarTodos();
+                }
+            }
+        } else {
+            usuarios = usuarioService.listarTodos();
+        }
+
+        model.addAttribute("usuarios", usuarios);
         return "users/lista";
     }
 
@@ -45,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping("/ver/{id}")
-    public String verDetalle(@PathVariable Long id, Model model) {
+    public String verDetalle(@PathVariable("id") Long id, Model model) {
         usuarioService.findById(id).ifPresentOrElse(
                 u -> model.addAttribute("usuario", u),
                 () -> model.addAttribute("error", "Usuario no encontrado")
@@ -54,7 +83,7 @@ public class UserController {
     }
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+    public String mostrarFormularioEditar(@PathVariable("id") Long id, Model model) {
         usuarioService.findById(id).ifPresentOrElse(
                 u -> model.addAttribute("usuario", u),
                 () -> model.addAttribute("error", "Usuario no encontrado")
@@ -63,7 +92,9 @@ public class UserController {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizarUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario, Model model) {
+    public String actualizarUsuario(@PathVariable("id") Long id,
+                                    @ModelAttribute Usuario usuario,
+                                    Model model) {
         try {
             usuario.setId(id);
             usuarioService.actualizar(id, usuario);
@@ -75,7 +106,7 @@ public class UserController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable Long id) {
+    public String eliminarUsuario(@PathVariable("id") Long id) {
         usuarioService.eliminar(id);
         return "redirect:/users/lista";
     }
@@ -87,7 +118,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarId(@PathVariable Long id) {
+    public ResponseEntity<Usuario> buscarId(@PathVariable("id") Long id) {
         return usuarioService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -104,7 +135,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable("id") Long id) {
         try {
             if (!usuarioService.existePorID(id)) {
                 return ResponseEntity.notFound().build();
@@ -117,7 +148,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<?> actualizar(@PathVariable("id") Long id,
+                                        @RequestBody Usuario usuario) {
         try {
             if (!usuarioService.existePorID(id)) {
                 return ResponseEntity.notFound().build();
@@ -132,11 +164,35 @@ public class UserController {
     }
 
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Usuario>> buscarPorEstado(@PathVariable Long estado) {
+    public ResponseEntity<List<Usuario>> buscarPorEstado(@PathVariable("estado") Long estado) {
         List<Usuario> usuario = usuarioService.buscarPorEstadoConFor(estado);
+
         if (usuario.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("/buscarEstado")
+    public String buscarPorEstadoVista(@RequestParam(name = "estado", required = false) Long estado,
+                                       Model model) {
+
+        if (estado != null) {
+
+            List<Usuario> usuarios = usuarioService.buscarPorEstadoConFor(estado);
+
+            model.addAttribute("usuarios", usuarios);
+            model.addAttribute("estado", estado);
+
+            if (usuarios.isEmpty()) {
+                model.addAttribute("error", "No se encontraron usuarios con estado: " + estado);
+            }
+
+        } else {
+            model.addAttribute("usuarios", usuarioService.listarTodos());
+        }
+
+        return "users/lista";
     }
 }

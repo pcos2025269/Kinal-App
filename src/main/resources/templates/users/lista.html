@@ -18,6 +18,41 @@
         <a th:href="@{/Inicio}" class="btn btn-secondary">Volver al menú</a>
     </div>
     <div class="card-body">
+      <div class="row mb-3">
+
+        <div class="col-md-6">
+          <form th:action="@{/users/lista}" method="get" class="d-flex">
+            <input type="text"
+                   name="buscar"
+                   class="form-control me-2"
+                   placeholder="Buscar por usuario o correo"
+                   th:value="${buscar}">
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <div class="col-md-6">
+          <form th:action="@{/users/buscarEstado}" method="get" class="d-flex">
+
+            <select name="estado" class="form-select me-2">
+              <option value="">Filtrar por estado</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-filter"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+      <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+      </div>
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-dark">
