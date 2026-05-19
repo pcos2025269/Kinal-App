@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="icon" href="./static/img/kinal.png" th:href="@{/img/kinal.png}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+ <div class="login-container">
+    <img th:src="@{/img/kinal.png}" alt="Logo Kinal" >
+     <h2>Iniciar Sesión</h2>
+
+     <div th:if="${param.error}" class="alert alert-error">
+         Usuario o contraseña incorrectos.
+     </div>
+
+     <form th:action="@{/login}" method="post">
+
+         <div class="input-group">
+             <span class="input-icon"><i class="fa fa-user"></i></span>
+             <input type="text" name="username" placeholder="Nombre de usuario" required autofocus>
+         </div>
+
+         <div class="input-group">
+             <span class="input-icon"><i class="fa fa-lock"></i></span>
+             <input type="password" name="password" placeholder="Contraseña" required>
+         </div>
+
+         <div class="action-group">
+             <button type="submit" class="btn-primary">Entrar</button>
+         </div>
+
+         <div class="footer-links">
+             <a href="#" class="link-secondary">¿Olvidaste tu contraseña?</a>
+             <span class="separator">|</span>
+             <a th:href="@{/Register}" class="link-highlight">Crear Cuenta</a>
+         </div>
+
+     </form>
+ </div>
+</body>
+</html>

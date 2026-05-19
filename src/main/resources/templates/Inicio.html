@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link rel="icon" href="./static/img/kinal.png" th:href="@{/img/kinal.png}">
+    <link rel="stylesheet" th:href="@{/css/inicio.css}">
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-return">
+            <span class="btn-title">Cerrar Sesión</span>
+        </button>
+    </form>
+    <h1></h1>
+    <p class="subtitle">Kinal App Elije un Crud a Usar </p>
+
+    <div class="menu-buttons">
+        <a th:href="@{/clientes/lista}" class="btn-clientes">
+            <div class="btn-icon"></div>
+            <span class="btn-title">Clientes</span>
+        </a>
+
+        <a th:href="@{/productos/lista}" class="btn-productos">
+            <div class="btn-icon"></div>
+            <span class="btn-title">Producto</span>
+        </a>
+
+        <a th:href="@{/venta/lista}" class="btn-ventas">
+            <div class="btn-icon"></div>
+            <span class="btn-title">ventas</span>
+        </a>
+
+        <a th:href="@{/DetalleVenta/lista}" class="btn-ventas">
+            <div class="btn-icon"></div>
+            <span class="btn-title">DetalleVenta</span>
+        </a>
+
+        <a th:href="@{/users/lista}" class="btn-clientes" sec:authorize="hasRole('ADMIN')">
+            <div class="btn-icon"></div>
+            <span class="btn-title">Usuarios</span>
+        </a>
+
+    </div>
+</div>
+</body>
+</html>

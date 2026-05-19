@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Venta</title>
+  <link rel="icon" href="./static/img/kinal.png" th:href="@{/img/kinal.png}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-info text-white">
+      <h3><i class="fas fa-receipt"></i> Detalle de Venta</h3>
+    </div>
+    <div class="card-body">
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+      <div th:if="${detalle != null}">
+        <p><strong>Código Detalle:</strong> <span th:text="${detalle.codigoDetalleVenta}"></span></p>
+        <p><strong>Producto:</strong> <span th:text="${detalle.detalleproducto.nombreProducto}"></span></p>
+        <p><strong>Cantidad:</strong> <span th:text="${detalle.cantidad}"></span></p>
+        <p><strong>Precio Unitario:</strong> Q <span th:text="${detalle.precioUnitario}"></span></p>
+        <p><strong>SubTotal:</strong> Q <span th:text="${detalle.subTotal}"></span></p>
+        <p><strong>Venta Código:</strong> <span th:text="${detalle.detalleVenta.codigoVenta}"></span></p>
+        <p><strong>Cliente:</strong> <span th:text="${detalle.detalleVenta.clienteVenta.nombreCliente} + ' ' + ${detalle.detalleVenta.clienteVenta.apellidoCliente}"></span></p>
+      </div>
+      <a th:href="@{/DetalleVenta/lista}" class="btn btn-secondary">Volver</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #69C6FF;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.subtitle {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #1f2d3a 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 50px;
+    margin-bottom: 55px;
+    border-radius: 18px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: rgb(12, 0, 0);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.subtitle:hover {
+    transform: translateY(-3px);
+    box-shadow: rgb(5, 0, 0);
+}
+
+.menu-buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-clientes, .btn-productos, .btn-ventas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 35px 50px;
+    border-radius: 16px;
+    transition: 0.25s ease;
+    cursor: pointer;
+    min-width: 210px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border: 1px solid #bdc3c7;
+}
+
+.btn-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.btn-icon {
+    font-size: 2.5rem;
+}
+
+.btn-clientes:hover, .btn-productos:hover, .btn-ventas:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background-color: #ffffff;
+}
+
+.btn-clientes:active, .btn-productos:active, .btn-ventas:active {
+    transform: translateY(2px);
+}
+
+.btn-clientes .btn-title {
+    color: #2980b9;
+}
+
+.btn-productos .btn-title {
+    color: #27ae60;
+}
+
+.btn-ventas .btn-title {
+    color: #e67e22;
+}
+
+.btn-return {
+background-color: #FF350D;
+color: white;
+block:quote;
+text-decoration: none;
+padding: 12px 25px;
+border-radius: 8px;
+transition: 0.25s ease;
+position: fixed;
+top: 20px;
+left: 20px;
+}
