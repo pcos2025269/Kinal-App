@@ -20,7 +20,7 @@ public class ProductoController {
     }
 
     @GetMapping("/lista")
-    public String listarVista(@RequestParam(required = false) String buscar, Model model) {
+    public String listarVista(@RequestParam(value = "buscar", required = false) String buscar, Model model) {
         List<Producto> productos;
 
         if (buscar != null && !buscar.trim().isEmpty()) {
@@ -82,7 +82,8 @@ public class ProductoController {
     }
 
     @GetMapping("/ver/{codigoProducto}")
-    public String verDetalle(@PathVariable Long codigoProducto, Model model) {
+    public String verDetalle(@PathVariable("codigoProducto") Long codigoProducto,
+                             Model model) {
         productosService.buscarPorId(codigoProducto)
                 .ifPresentOrElse(
                         producto -> model.addAttribute("producto", producto),
@@ -92,7 +93,8 @@ public class ProductoController {
     }
 
     @GetMapping("/editar/{codigoProducto}")
-    public String mostrarFormularioEditar(@PathVariable Long codigoProducto, Model model) {
+    public String mostrarFormularioEditar( @PathVariable("codigoProducto") Long codigoProducto,
+                                           Model model) {
         productosService.buscarPorId(codigoProducto)
                 .ifPresentOrElse(
                         producto -> model.addAttribute("producto", producto),
@@ -102,7 +104,7 @@ public class ProductoController {
     }
 
     @PostMapping("/actualizar/{codigoProducto}")
-    public String actualizarProducto(@PathVariable Long codigoProducto,
+    public String actualizarProducto(@PathVariable("codigoProducto") Long codigoProducto,
                                      @ModelAttribute Producto producto,
                                      Model model) {
         try {
@@ -116,7 +118,8 @@ public class ProductoController {
     }
 
     @GetMapping("/eliminar/{codigoProducto}")
-    public String eliminarProducto(@PathVariable Long codigoProducto) {
+    public String eliminarProducto(@PathVariable("codigoProducto") Long codigoProducto
+    ) {
         if (productosService.existePorcodigo(codigoProducto)) {
             productosService.eliminar(codigoProducto);
         }
@@ -130,7 +133,8 @@ public class ProductoController {
     }
 
     @GetMapping("/api/{codigoProducto}")
-    public ResponseEntity<Producto> buscarPorCodigo(@PathVariable Long codigoProducto) {
+    public ResponseEntity<Producto> buscarPorCodigo(@PathVariable("codigoProducto") Long codigoProducto
+    ) {
         return productosService.buscarPorId(codigoProducto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -147,7 +151,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{codigoProducto}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long codigoProducto) {
+    public ResponseEntity<Void> eliminar(@PathVariable("codigoProducto") Long codigoProducto) {
         try {
             if (!productosService.existePorcodigo(codigoProducto)) {
                 return ResponseEntity.notFound().build();
@@ -160,7 +164,7 @@ public class ProductoController {
     }
 
     @PutMapping("/{codigoProducto}")
-    public ResponseEntity<?> actualizar(@PathVariable Long codigoProducto, @RequestBody Producto producto) {
+    public ResponseEntity<?> actualizar(@PathVariable("codigoProducto") Long codigoProducto, @RequestBody Producto producto) {
         try {
             if (!productosService.existePorcodigo(codigoProducto)) {
                 return ResponseEntity.notFound().build();
@@ -175,7 +179,7 @@ public class ProductoController {
     }
 
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Producto>> buscarPorEstado(@PathVariable Long estado) {
+    public ResponseEntity<List<Producto>> buscarPorEstado(@PathVariable("estado") Long estado) {
         List<Producto> productos = productosService.buscarrPorEstadoConFor(estado);
         if (productos.isEmpty()) {
             return ResponseEntity.notFound().build();
