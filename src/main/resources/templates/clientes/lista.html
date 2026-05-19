@@ -24,7 +24,9 @@
             </a>
         </div>
         <div class="card-body">
-            <div class="row mb-4">
+
+            <!-- Búsqueda por DPI, Nombre o Apellido (sin tocar) -->
+            <div class="row mb-3">
                 <div class="col-md-8 mx-auto">
                     <form th:action="@{/clientes/lista}" method="get" class="d-flex">
                         <input type="text"
@@ -37,6 +39,25 @@
                         </button>
                         <a th:href="@{/clientes/lista}" class="btn btn-secondary ms-2">
                             <i class="fas fa-sync-alt"></i> Limpiar
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-8 mx-auto">
+                    <form th:action="@{/clientes/buscarEstado}" method="get" class="d-flex align-items-center">
+                        <select name="estado" class="form-select me-2">
+                            <option value="" th:selected="${estado == null}">-- Estados --</option>
+                            <option value="1" th:selected="${estado == 1}">Activo</option>
+                            <option value="0" th:selected="${estado == 0}">Inactivo</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-filter"></i> Buscar
+                        </button>
+                        <a th:href="@{/clientes/lista}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sync-alt"></i>Todos
+                            </button>
                         </a>
                     </form>
                 </div>
@@ -99,9 +120,6 @@
                 <small>Total: <strong th:text="${clientes.size()}"></strong> cliente(s)</small>
             </div>
 
-            <div class="mt-3">
-
-            </div>
         </div>
     </div>
 </div>
