@@ -169,4 +169,19 @@ public class ClienteController {
         }
         return ResponseEntity.ok(clientes);
     }
+
+    @GetMapping("/buscarEstado")
+    public String buscarPorEstadoVista(@RequestParam(name = "estado", required = false) Long estado, Model model) {
+        if (estado != null) {
+            List<Cliente> clientes = clienteService.buscarPorEstadoConFor(estado);
+            model.addAttribute("clientes", clientes);
+            model.addAttribute("estado", estado);
+            if (clientes.isEmpty()) {
+                model.addAttribute("error", "No se encontraron clientes con estado: " + estado);
+            }
+        } else {
+            model.addAttribute("clientes", clienteService.listarTodos());
+        }
+        return "clientes/lista";
+    }
 }
